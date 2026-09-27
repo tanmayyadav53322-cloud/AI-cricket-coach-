@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Cricket Coach</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f5ef;--card:#fff;--ink:#12241a;--mute:#56685c;--line:#d3dcd0;--pitch:#1f4d2e;--onp:#f2f5ef;--seam:#b3261e;--sand:#e6dfc8}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1a13;--card:#15271c;--ink:#e9efe6;--mute:#9db0a2;--line:#274031;--pitch:#4a9e64;--onp:#0e1a13;--seam:#e0564c;--sand:#2a3a2e}}
+:root[data-theme="dark"]{--bg:#0e1a13;--card:#15271c;--ink:#e9efe6;--mute:#9db0a2;--line:#274031;--pitch:#4a9e64;--onp:#0e1a13;--seam:#e0564c;--sand:#2a3a2e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Barlow,system-ui,sans-serif;padding-bottom:76px}
+main{max-width:920px;margin:0 auto;padding:20px 16px}
+h1,h2,h3{font-family:'Barlow Condensed','Arial Narrow',sans-serif;line-height:1.05;margin:0 0 .4em;letter-spacing:.01em}
+h1{font-size:clamp(3rem,13vw,5.5rem)}h2{font-size:2rem}h3{font-size:1.35rem}
+p{margin:0 0 .8em;max-width:60ch}.mute{color:var(--mute)}
+a{color:inherit}[hidden]{display:none!important}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--line);z-index:5}
+nav a{flex:1;text-align:center;padding:10px 4px;text-decoration:none;font-size:.8rem;color:var(--mute)}
+nav a b{display:block;font-size:1.25rem;font-weight:400}nav a.on{color:var(--pitch);font-weight:600}
+nav a:focus-visible,.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.chip input:focus-visible+span{outline:3px solid var(--seam);outline-offset:2px}
+@media(min-width:720px){body{padding:0}nav{position:sticky;top:0;bottom:auto;border:0;border-bottom:1px solid var(--line);justify-content:center}nav a{flex:0 0 120px;display:flex;gap:6px;justify-content:center;align-items:center;font-size:.95rem}nav a b{display:inline;font-size:1.1rem}}
+.btn{display:inline-block;background:var(--pitch);color:var(--onp);border:0;border-radius:10px;padding:13px 20px;font:600 1rem Barlow,sans-serif;text-decoration:none;cursor:pointer}
+.btn.ghost{background:none;color:var(--ink);border:2px solid var(--ink)}.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.hero{background:var(--pitch);color:var(--onp);border-radius:22px;padding:28px 20px 22px;margin-bottom:28px;overflow:hidden}
+.hero p{font-size:1.1rem}.hero .btn{background:var(--onp);color:var(--pitch)}.hero .btn.ghost{background:none;color:var(--onp);border-color:var(--onp)}
+.hero svg{display:block;width:100%;margin-top:22px}
+.ball{stroke-dasharray:420;stroke-dashoffset:420;animation:d 2.2s .3s ease-out forwards}@keyframes d{to{stroke-dashoffset:0}}
+@media(prefers-reduced-motion:reduce){.ball{animation:none;stroke-dashoffset:0}}
+.pill{display:inline-block;font-size:.8rem;font-weight:600;padding:2px 10px;border-radius:999px;background:var(--sand);color:var(--ink)}
+.pill.live{background:var(--pitch);color:var(--onp)}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+a.card{display:block;text-decoration:none}a.card:hover{border-color:var(--pitch)}
+.card.off{opacity:.6}
+.steps{list-style:none;padding:0;margin:0 0 32px;display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));counter-reset:s}
+.steps li{border-left:4px solid var(--seam);padding-left:12px;counter-increment:s}.steps li:before{content:counter(s);font:700 2rem 'Barlow Condensed',sans-serif;color:var(--seam);display:block}
+.feat{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+label.f{display:block;margin:0 0 14px;font-weight:600}
+input[type=text],input[type=number],input[type=email],select,textarea{width:100%;margin-top:4px;padding:11px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:400 1rem Barlow,sans-serif}
+fieldset{border:0;padding:0;margin:0 0 14px}legend{font-weight:600;margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}.chip input{position:absolute;opacity:0}
+.chip span{display:inline-block;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:var(--card);cursor:pointer}
+.chip input:checked+span{background:var(--pitch);color:var(--onp);border-color:var(--pitch)}
+.stat{font:700 2.6rem 'Barlow Condensed',sans-serif;color:var(--pitch)}
+video{width:100%;max-height:360px;border-radius:12px;background:#000;margin:10px 0}
+.msg{padding:12px;border-radius:10px;background:var(--sand);margin:8px 0}.msg.bad{border-left:5px solid var(--seam)}.msg.ok{border-left:5px solid var(--pitch)}
+ul.chk{margin:0 0 16px;padding-left:20px}
+.chip span{padding:11px 14px}.bar{height:8px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;width:0;background:var(--pitch);transition:width .3s}
+.thumb{width:72px;height:auto;border-radius:8px;background:#000}.day{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px}.day input{width:26px;height:26px;margin-top:2px;accent-color:var(--pitch)}
+#toast{position:fixed;left:12px;right:12px;bottom:84px;z-index:40;margin:0}
+#stg{list-style:none;padding:0;margin:0 0 12px}#stg li{padding:8px 0;color:var(--mute)}#stg li.on{color:var(--ink);font-weight:600}#stg li.on:before{content:"● "}#stg li.ok:before{content:"✓ "}
+#camscr{position:fixed;inset:0;background:#000;z-index:30;color:#fff;overflow:hidden}
+#camscr video,#camscr canvas{position:absolute;inset:0;width:100%;height:100%}#cv{object-fit:contain}
+#guide{position:absolute;left:10%;right:10%;top:18%;bottom:26%;border:3px solid #4a9e64;border-radius:24px;pointer-events:none}
+#ctop{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 10px;background:linear-gradient(#000a,transparent)}
+#chint{position:absolute;left:0;right:0;top:calc(66px + env(safe-area-inset-top,0px));text-align:center;font-weight:600;padding:0 16px;text-shadow:0 1px 3px #000}
+#cbot{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;gap:24px;padding:16px 12px calc(20px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,#000a)}
+.cbtn{width:48px;height:48px;border-radius:50%;border:0;background:#0009;color:#fff;font-size:1.2rem}
+#cstart,#cstop{width:72px;height:72px;border-radius:50%;border:4px solid #fff;background:#e0564c;padding:0}#cstop{border-radius:20px}
+#ccount{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 9rem 'Barlow Condensed',sans-serif;background:#0006}
+#crec{color:#ff5a4f;font-weight:700}
+#cpose{position:absolute;left:12px;bottom:calc(120px + env(safe-area-inset-bottom,0px));font-size:.85rem;background:#0009;padding:4px 10px;border-radius:999px}
+#cdisc{position:absolute;left:12px;right:12px;bottom:calc(120px + env(safe-area-inset-bottom,0px));background:#15271c;padding:12px;border-radius:12px}
+#camscr .btn.ghost{color:#fff;border-color:#fff}#camscr{overscroll-behavior:contain;touch-action:none}#cpm{opacity:.85}#camscr video{max-height:none;margin:0;border-radius:0}
+.gbtn{position:relative;overflow:hidden;cursor:pointer}.gbtn input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0}.gbtn:focus-within{outline:3px solid var(--seam);outline-offset:2px}
+</style></head><body>
+<nav aria-label="Main"><a href="#" data-go="home"><b>🏠</b>Home</a><a href="#" data-go="dashboard"><b>📊</b>Dashboard</a><a href="#" data-go="analyze"><b>🎥</b>Analyze</a><a href="#" data-go="profile"><b>👤</b>Profile</a></nav>
+<main>
+
+<section data-view="home">
+ <div class="hero">
+  <h1>Analyze.<br>Train.<br>Improve.</h1>
+  <p>Upload your cricket video and get AI-powered technique insights and personalized training guidance.</p>
+  <div class="row"><a class="btn" href="#" data-go="analyze">Analyze my video</a><a class="btn ghost" href="#" data-go="training">Explore training</a></div>
+  <svg viewBox="0 0 320 110" aria-hidden="true"><rect x="0" y="0" width="320" height="110" rx="8" fill="#000" opacity=".18"/><rect x="20" y="38" width="280" height="34" fill="#e6dfc8" opacity=".9"/><g stroke="#f2f5ef" stroke-width="2"><line x1="60" y1="30" x2="60" y2="80"/><line x1="260" y1="30" x2="260" y2="80"/><line x1="20" y1="55" x2="300" y2="55" stroke-dasharray="2 6" opacity=".5"/></g><g stroke="#f2f5ef" stroke-width="3"><line x1="272" y1="48" x2="272" y2="62"/><line x1="278" y1="48" x2="278" y2="62"/><line x1="284" y1="48" x2="284" y2="62"/></g><path class="ball" d="M40 20 C120 20 170 90 268 58" fill="none" stroke="#e0564c" stroke-width="3" stroke-dasharray="420"/><circle cx="268" cy="58" r="5" fill="#e0564c"/></svg>
+ </div>
+ <p class="msg">Preview build: profile, dashboard and video upload with quality checks work today. AI Video Analysis — Coming Soon. No feedback is generated until a real pose-estimation model is connected.</p>
+ <h2>How it works</h2>
+ <ol class="steps"><li><h3>Upload</h3>Upload your batting or bowling video.</li><li><h3>Analyze</h3>AI analyzes visible body movement and cricket technique.</li><li><h3>Understand</h3>Receive strengths, possible issues, and explanations.</li><li><h3>Train</h3>Follow personalized drills and a weekly training plan.</li></ol>
+ <h2 id="feat">What you get</h2>
+ <div class="feat"><div><b>Profile and dashboard</b><br><span class="mute">Your role, level and goal in one place.</span></div><span class="pill live">Available</span></div>
+ <div class="feat"><div><b>Video upload with quality checks</b><br><span class="mute">Length, resolution and brightness are checked before analysis.</span></div><span class="pill live">Available</span></div>
+ <div class="feat"><div><b>Batting and bowling analysis</b><br><span class="mute">Strengths, possible issues, confidence levels.</span></div><span class="pill">Coming soon</span></div>
+ <div class="feat"><div><b>Drills and 7-day plan</b><br><span class="mute">Matched to your role, level and goal.</span></div><span class="pill">Coming soon</span></div>
+ <div class="feat"><div><b>AI Coach chat (English, Hindi, Hinglish)</b></div><span class="pill">Coming soon</span></div>
+ <div class="feat"><div><b>Progress tracking</b></div><span class="pill">Coming soon</span></div>
+</section>
+
+<section data-view="auth" hidden>
+ <h2>Sign in</h2>
+ <p class="mute">Create an account or sign in to save your profile and videos to your account.</p>
+ <label class="f">Email<input type="email" id="a_email" autocomplete="email"></label>
+ <label class="f">Password (6+ characters)<input type="password" id="a_pass" autocomplete="current-password"></label>
+ <div id="aerr" class="msg bad" hidden></div>
+ <div id="amsg" class="msg ok" hidden></div>
+ <div class="row"><button class="btn" id="asignin">Sign In</button><button class="btn ghost" id="asignup">Create Account</button></div>
+</section>
+
+<section data-view="profile" hidden>
+ <h2>Your cricket profile</h2>
+ <p class="mute">Signed in with your account. Synced to your account and this device.</p>
+ <label class="f">Name<input type="text" id="p_name" autocomplete="name"></label>
+ <div class="row"><label class="f" style="flex:1;min-width:120px">Age (optional)<input type="number" id="p_age" min="5" max="90"></label><label class="f" style="flex:2;min-width:180px">Location (optional)<input type="text" id="p_loc"></label></div>
+ <fieldset><legend>Playing level</legend><div class="chips" id="c_level"></div></fieldset>
+ <fieldset><legend>Playing role</legend><div class="chips" id="c_role"></div></fieldset>
+ <fieldset><legend>Batting style</legend><div class="chips" id="c_bat"></div></fieldset>
+ <div id="bowlwrap"><fieldset><legend>Bowling arm</legend><div class="chips" id="c_arm"></div></fieldset><fieldset><legend>Bowling type</legend><div class="chips" id="c_btype"></div></fieldset></div>
+ <div class="row"><label class="f" style="flex:1;min-width:110px">Height cm (optional)<input type="number" id="p_h" min="80" max="230"></label><label class="f" style="flex:1;min-width:110px">Weight kg (optional)<input type="number" id="p_w" min="20" max="200"></label><label class="f" style="flex:1;min-width:110px">Years playing (optional)<input type="number" id="p_y" min="0" max="70"></label></div>
+ <label class="f">Favorite shot (optional)<input type="text" id="p_fs"></label>
+ <fieldset><legend>Training days per week (optional)</legend><div class="chips" id="c_days"></div></fieldset>
+ <fieldset><legend>Main goal</legend><div class="chips" id="c_goal"></div></fieldset>
+ <div id="perr" class="msg bad" hidden></div>
+ <button class="btn" id="psave">Save profile</button>
+ <p class="mute" style="margin-top:16px">AI feedback is for training guidance and should not replace a qualified cricket coach or medical professional.</p>
+ <button class="btn ghost" id="delall">Delete all analysis history</button>
+ <button class="btn ghost" id="signout" hidden style="margin-left:8px">Sign out</button>
+</section>
+
+<section data-view="dashboard" hidden>
+ <h2 id="welcome"></h2>
+ <p class="mute" id="psum"></p>
+ <div class="grid" style="margin-bottom:12px">
+  <div class="card"><div class="stat" id="s_vid">0</div>Videos analyzed</div>
+  <div class="card"><div class="stat" id="s_str">0 days</div>Training streak</div>
+ </div>
+ <div class="grid">
+  <a class="card" href="#" data-go="analyze" data-type="Batting"><h3>Batting analysis</h3><span class="mute" id="lb">Upload a batting video.</span></a>
+  <a class="card" href="#" data-go="analyze" data-type="Fast Bowling"><h3>Bowling analysis</h3><span class="mute" id="lw">Upload a fast or spin bowling video.</span></a>
+  <a class="card" href="#" data-go="training" data-lib="Fitness"><h3>Fitness</h3><span class="mute">Mobility, core and strength drills.</span></a>
+  <a class="card" href="#" data-go="progress"><h3>Progress</h3><span class="mute" id="prg"></span></a>
+  <div class="card"><h3>Recent feedback</h3><span class="mute" id="rf">No videos analyzed yet.</span></div>
+  <div class="card"><h3>Recommended drills</h3><span class="mute" id="rd">None yet.</span></div>
+  <a class="card" href="#" data-go="history"><h3>Analysis history</h3><span class="mute" id="vlist"></span></a>
+ </div>
+ <div class="grid" style="margin-top:12px">
+  <div class="card"><h3>Latest analysis</h3><span class="mute" id="lat">None yet. Upload a video to get started.</span></div>
+  <div class="card"><h3>Current improvement areas</h3><span class="mute" id="imp">None yet.</span></div>
+  <div class="card"><h3>Latest training plan</h3><span class="mute" id="lpl">None yet.</span></div>
+ </div>
+</section>
+
+<section data-view="analyze" hidden>
+ <h2>Analyze my technique</h2>
+ <fieldset><legend>What are you analyzing?</legend><div class="chips" id="c_type"></div></fieldset>
+ <div id="pick">
+  <div class="row" style="margin-bottom:10px"><span class="btn gbtn">Choose from Gallery<input type="file" accept="video/*" id="f_gal" aria-label="Choose from Gallery"></span><button class="btn ghost" id="camr">Record with Camera</button><button class="btn ghost" id="camb">Live recorder</button><input type="file" accept="video/*" capture="environment" id="f_cam" hidden></div>
+  <p class="mute" style="margin:0 0 6px">Recommended: keep your full body visible, use good lighting, keep the camera steady and film from the side or behind the stumps.</p><p class="mute">Video length: 3 to 90 seconds, up to 200 MB.</p><p class="mute">Camera not working here? Record with your phone's camera app, then tap Choose from Gallery.</p><div id="gfix" class="msg" hidden>Gallery or camera not opening? This viewer may block them. <button class="btn ghost" id="gchr" style="margin-top:8px">Open in Chrome</button></div>
+ </div>
+  <div id="vmsg" class="msg" hidden></div><div id="vact" class="row" hidden style="margin-bottom:10px"></div>
+</section>
+
+<section data-view="review" hidden>
+ <h2>Review your video</h2>
+ <video id="pv" controls playsinline></video>
+ <div class="row" style="align-items:center;margin-bottom:12px"><img id="thumbimg" class="thumb" alt="Video thumbnail" hidden><div id="rmeta"></div></div>
+  <label class="f">What are you trying to improve? (optional)<input type="text" id="n_goal" placeholder="e.g. improve my cover drive"></label>
+ <label class="f">Which shot or delivery? (optional)<input type="text" id="n_shot" placeholder="e.g. cover drive, outswinger"></label>
+ <label class="f">What problem do you feel you have? (optional)<textarea id="n_prob" rows="2"></textarea></label>
+ <div class="row"><button class="btn ghost" id="chg">Choose Another Video</button><button class="btn ghost" id="retake" hidden>Retake</button><button class="btn ghost" id="rem">Remove video</button><button class="btn" id="go">Analyze Video</button></div>
+ <div id="rmsg" class="msg" hidden style="margin-top:12px"></div>
+</section>
+
+<section data-view="process" hidden>
+ <h2 id="ph">Analyzing your video</h2>
+ <ul id="stg"></ul><div class="bar"><i id="pb"></i></div>
+ <div id="pferr" class="msg bad" hidden style="margin-top:12px"></div>
+ <div class="row" id="pact" hidden style="margin-top:8px"><button class="btn" id="pretry">Try Again</button><button class="btn ghost" id="pback">Upload Another Video</button></div>
+</section>
+
+<section data-view="results" hidden>
+ <h2>Your Technique Analysis</h2><div id="rbody"></div>
+ <div class="row" style="margin-top:14px"><button class="btn" id="mkplan">Create My 7-Day Training Plan</button><button class="btn ghost" data-del-cur>Delete analysis</button></div>
+</section>
+
+<section data-view="plan" hidden>
+ <h2>Your 7-day plan</h2><p class="mute">Built from your profile and this analysis. Stop if anything hurts and see a qualified coach or medical professional.</p>
+ <div id="pbody"></div>
+ <div class="row"><button class="btn ghost" data-go="results">Back to analysis</button><button class="btn" data-go="dashboard">Back to Dashboard</button></div>
+</section>
+
+<section data-view="training" hidden><h2>Training library</h2><p class="mute">General coaching drills, not taken from your video.</p><div class="chips" id="c_lib" style="margin-bottom:12px"></div><div id="lib"></div></section>
+<section data-view="progress" hidden><h2>Progress</h2><div id="prog2"></div></section>
+<section data-view="history" hidden><h2>My Analysis History</h2><div id="hlist"></div></section>
+<div id="camscr" hidden>
+ <video id="cv" autoplay playsinline muted></video><canvas id="cvo"></canvas><div id="guide"></div>
+ <div id="ctop"><button class="cbtn" id="cclose" aria-label="Close camera">✕</button><span id="crec" hidden>● REC</span><b id="ctimer">0:00 / 1:30</b><span><button class="cbtn" id="cflash" aria-label="Flash" hidden>⚡</button> <button class="cbtn" id="cflip" aria-label="Switch camera">🔄</button></span></div>
+ <div id="chint">Keep full body in frame<br><small>For batting, film from the side or behind the stumps.</small><br><small id="cpm"></small></div>
+ <div id="cpose" hidden></div><div id="ccount" hidden></div>
+ <div id="cdisc" hidden>Discard this recording?<div class="row" style="margin-top:8px"><button class="btn" id="cdo">Discard</button><button class="btn ghost" id="cdk">Continue Recording</button></div></div>
+ <div id="cbot"><button class="cbtn" id="cpause" aria-label="Pause" hidden>⏸</button><button id="cstart" aria-label="Start recording"></button><button id="cstop" aria-label="Stop recording" hidden></button></div>
+</div>
+<div id="toast" class="msg" hidden></div>
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let S={p:null,v:[],t:'Batting'};
+try{S.p=JSON.parse(localStorage.getItem('acc_p')||'null');S.v=JSON.parse(localStorage.getItem('acc_v')||'[]').filter(x=>x&&x.result);S.t=localStorage.getItem('acc_t')||'Batting'}catch(e){}
+const save=()=>{try{localStorage.setItem('acc_p',JSON.stringify(S.p));localStorage.setItem('acc_v',JSON.stringify(S.v));localStorage.setItem('acc_t',S.t)}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/* ---- Supabase backend ---- */
+const SUPABASE_URL='https://qzxslpattuzeqwwahzxm.supabase.co';
+const SUPABASE_ANON_KEY='sb_publishable_KA2yo7FC8YJ5uQwdFE70SQ_WuZ1cthT';
+const BUCKET='cricket-videos';
+const sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
+let session=null;
+function fromRow(d){return {uid:d.user_id,name:d.name||'',age:d.age||'',loc:d.loc||'',level:d.level||'',role:d.role||'',bat:d.bat||'',arm:d.arm||'',btype:d.btype||'',bowl:d.bowl||'',h:d.height||'',w:d.weight||'',y:d.years||'',fs:d.fav_shot||'',days:d.days?String(d.days):'',goal:d.goal||''}}
+async function afterAuth(){
+ if(!sb||!session)return;
+ try{const {data,error}=await sb.from('profiles').select('*').eq('user_id',session.user.id).maybeSingle();if(!error&&data)S.p=fromRow(data)}catch(e){}
+ save();go(S.p?'dashboard':'profile')}
+function aerr(t){$('#amsg').hidden=true;const e=$('#aerr');e.textContent=t;e.hidden=false}
+function amsg(t){$('#aerr').hidden=true;const e=$('#amsg');e.textContent=t;e.hidden=false}
+async function authAction(method){
+ if(!sb)return aerr('Backend is not reachable from this preview. Host this page on your own site to sign in.');
+ const email=$('#a_email').value.trim(),pass=$('#a_pass').value;
+ if(!email||pass.length<6)return aerr('Enter a valid email and a password with at least 6 characters.');
+ $('#asignin').disabled=$('#asignup').disabled=true;$('#aerr').hidden=true;$('#amsg').hidden=true;
+ try{
+  const {data,error}=method==='signUp'?await sb.auth.signUp({email,password:pass}):await sb.auth.signInWithPassword({email,password:pass});
+  if(error)return aerr(error.message);
+  if(method==='signUp'&&!data.session)return amsg('Check your email to confirm your account, then sign in.');
+  session=data.session;await afterAuth()
+ }catch(e){aerr('Could not reach the server. Check your connection and try again.')}
+ finally{$('#asignin').disabled=$('#asignup').disabled=false}}
+$('#asignin').onclick=()=>authAction('signInWithPassword');
+$('#asignup').onclick=()=>authAction('signUp');
+$('#signout').onclick=async()=>{if(sb){try{await sb.auth.signOut()}catch(e){}}session=null;S.p=null;S.v=[];save();go('auth')};
+if(sb){
+ sb.auth.getSession().then(({data})=>{session=data.session;if(session)afterAuth()});
+ sb.auth.onAuthStateChange((ev,sess)=>{if(ev==='SIGNED_OUT'){session=null;S.p=null;S.v=[];save()}});
+}
+
+const OPT={level:['Beginner','Intermediate','Advanced'],role:['Batsman','Fast Bowler','Spin Bowler','Wicketkeeper','All-rounder'],bat:['Right-handed','Left-handed'],goal:['Improve batting','Improve bowling','Improve fitness','Improve consistency','Improve technique','Prepare for matches'],type:['Batting','Fast Bowling','Spin Bowling','Wicketkeeping','Fielding'],arm:['Right-arm','Left-arm'],btype:['Fast','Medium','Spin'],days:['1','2','3','4','5','6','7'],lib:['Batting','Fast Bowling','Spin Bowling','Wicketkeeping','Fielding','Fitness']};
+for(const k in OPT)$('#c_'+k).innerHTML=OPT[k].map(o=>`<label class="chip"><input type="radio" name="${k}" value="${o}"><span>${o}</span></label>`).join('');
+const val=k=>($(`input[name=${k}]:checked`)||{}).value||'';
+const setVal=(k,v)=>$$(`input[name=${k}]`).forEach(i=>i.checked=i.value===v);
+let type=OPT.type.includes(S.t)?S.t:'Batting';setVal('type',type);
+$('#c_type').onchange=()=>{type=val('type');S.t=type;save();renderMeta()};
+const pickType=t=>{type=t;S.t=t;save();setVal('type',t);renderMeta()};
+function bowlVis(){$('#bowlwrap').hidden=!/Bowler|All-rounder/.test(val('role'))}
+$('#c_role').onchange=bowlVis;
+function go(v,push=true){
+ if(['dashboard','analyze','profile','history','progress'].includes(v)&&sb&&!session)v='auth';
+ else if((v==='dashboard'||v==='analyze')&&!S.p)v='profile';
+ if(v!=='analyze')closeCam();
+ $$('[data-view]').forEach(e=>e.hidden=e.dataset.view!==v);
+ const nv=(v==='review'||v==='process')?'analyze':v;$$('nav a').forEach(a=>a.classList.toggle('on',a.dataset.go===nv));if(v==='analyze')setVal('type',type);
+ if(v==='dashboard')dash();if(v==='review'){renderMeta();$('#chg').textContent=src==='cam'?'Retake':'Choose Another Video'}if(v==='training'){if(!val('lib'))setVal('lib','Batting');showLib(val('lib'))}if(v==='progress')showProg();if(v==='profile')fill();if(v==='history')hist();if(v==='auth'){$('#aerr').hidden=true;$('#amsg').hidden=true}
+ if(push){try{history.pushState({v:v},'')}catch(e){}}
+ window.scrollTo(0,0)}
+addEventListener('popstate',e=>{
+ if(!$('#camscr').hidden){if(cs.rec&&cs.rec.state!=='inactive'){try{history.pushState({v:'analyze',cam:1},'')}catch(_){}$('#cdisc').hidden=false}else closeCam();return}
+ go((e.state&&e.state.v)||'home',false)});
+document.addEventListener('click',e=>{const t=e.target.closest('[data-go]');if(!t)return;e.preventDefault();go(t.dataset.go);if(t.dataset.type)pickType(t.dataset.type);if(t.dataset.lib){setVal('lib',t.dataset.lib);showLib(t.dataset.lib)}});
+function fill(){const p=S.p||{};$('#p_name').value=p.name||'';$('#p_age').value=p.age||'';$('#p_loc').value=p.loc||'';['arm','btype','days'].forEach(k=>setVal(k,p[k]||''));$('#p_h').value=p.h||'';$('#p_w').value=p.w||'';$('#p_y').value=p.y||'';$('#p_fs').value=p.fs||'';['level','role','bat','goal'].forEach(k=>setVal(k,p[k]||''));bowlVis();$('#signout').hidden=!(sb&&session)}
+$('#psave').onclick=async()=>{
+ const bv=!$('#bowlwrap').hidden;const p={uid:(session&&session.user.id)||(S.p&&S.p.uid)||('local-'+Date.now().toString(36)),name:$('#p_name').value.trim(),age:$('#p_age').value,loc:$('#p_loc').value.trim(),level:val('level'),role:val('role'),bat:val('bat'),arm:bv?val('arm'):'',btype:bv?val('btype'):'',bowl:bv?[val('arm'),val('btype')].filter(Boolean).join(' '):'',h:$('#p_h').value,w:$('#p_w').value,y:$('#p_y').value,fs:$('#p_fs').value.trim(),days:val('days'),goal:val('goal')};
+ const miss=[!p.name&&'name',!p.level&&'playing level',!p.role&&'playing role',!p.goal&&'main goal'].filter(Boolean);
+ const e=$('#perr');
+ if(miss.length){e.textContent='Please add your '+miss.join(', ')+'.';e.hidden=false;return}
+ e.hidden=true;S.p=p;save();
+ if(sb&&session){
+  const row={user_id:session.user.id,name:p.name,age:p.age?+p.age:null,loc:p.loc||null,level:p.level,role:p.role,bat:p.bat||null,arm:p.arm||null,btype:p.btype||null,bowl:p.bowl||null,height:p.h?+p.h:null,weight:p.w?+p.w:null,years:p.y?+p.y:null,fav_shot:p.fs||null,days:p.days?+p.days:null,goal:p.goal,updated_at:new Date().toISOString()};
+  try{const {error}=await sb.from('profiles').upsert(row,{onConflict:'user_id'});if(error)toast("Saved on this device. Couldn't sync to your account: "+error.message)}
+  catch(e){toast('Saved on this device. Will sync to your account when back online.')}
+ }
+ go('dashboard')};
+/* ---- Analysis backend (set API_BASE to your server origin to enable) ----
+ POST {API_BASE}/api/analyze-video  multipart: video, analysisType, playerProfile (JSON), playerGoal, shotOrDelivery, problem
+   analysisType: batting | fast_bowling | spin_bowling | wicketkeeping | fielding
+   -> 200 {status:"complete",videoId,analysis:{...}} (or the analysis object itself)  or  202 {jobId}
+ GET  {API_BASE}/api/analyze-video/{jobId} -> {status:"preparing|analyzing|evaluating|generating|complete|failed",videoId,analysis,code}
+ DELETE {API_BASE}/api/videos/{videoId}
+ HTTP 501 or code "not_configured" = video received but no computer-vision model is connected.
+ analysis: {analysisType,videoQuality:"good|fair|poor|insufficient",overallObservation,strengths[str],
+   possibleIssues[{issue,evidence,whyItMatters,recommendation,confidence:"high|medium|low"}],
+   recommendedDrills[{name,purpose,instructions,duration,difficulty,commonMistakes}],confidence,limitations[str],trainingFocus?[str]}
+ For poor or partial views, put "Unable to assess this movement reliably from the uploaded video." or
+ "The available camera angle limits this assessment." in limitations. */
+const API_BASE=null;
+const E={sw:'Something went wrong while analyzing your video.',perm:'Camera permission is required to record a video. Please allow camera access in your device settings.',up:'Video upload failed. Please check your internet connection and try again.',poor:"We couldn't reliably analyze this video. Please record from a stable side or rear angle with your full body visible.",ai:'AI analysis service is currently unavailable. Please try again later.',off:'AI video analysis is not connected yet. Please configure the computer-vision service.'};
+const key=d=>d.toLocaleDateString('en-CA');
+const fmt=s=>Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
+let tt;function toast(t){const e=$('#toast');e.textContent=t;e.hidden=false;clearTimeout(tt);tt=setTimeout(()=>e.hidden=true,4000)}
+function streak(){const s=new Set(S.v.flatMap(v=>v.plan?Object.values(v.plan.done):[]));let d=new Date(),n=0;if(!s.has(key(d)))d.setDate(d.getDate()-1);while(s.has(key(d))){n++;d.setDate(d.getDate()-1)}return n}
+const latest=t=>S.v.slice().reverse().find(v=>t.includes(v.type));
+const when=v=>new Date(v.date).toLocaleDateString();
+function dash(){
+ $('#welcome').textContent='Welcome, '+S.p.name;
+ $('#psum').textContent=[S.p.level,S.p.role,S.p.goal].filter(Boolean).join(' · ');
+ $('#s_vid').textContent=S.v.length;const n=streak();$('#s_str').textContent=n+(n===1?' day':' days');
+ const lb=latest(['Batting']),lw=latest(['Fast Bowling','Spin Bowling']),l=S.v[S.v.length-1];
+ $('#lb').textContent=lb?'Latest: '+(lb.area||'complete')+' · '+when(lb):'Upload a batting video.';
+ $('#lw').textContent=lw?'Latest: '+(lw.area||'complete')+' · '+when(lw):'Upload a fast or spin bowling video.';
+ $('#lat').innerHTML=l?`<a href="#" data-open="${esc(l.id)}">${esc(l.type)} · ${when(l)} · focus: ${esc(l.area||'none listed')}</a>`:'No videos analyzed yet.<br><br><a class="btn" href="#" data-go="analyze">Analyze your first video</a>';
+ $('#vlist').textContent=S.v.length+' saved';
+ $('#rf').textContent=l?l.result.overallObservation:'No videos analyzed yet.';
+ const dd=l?l.result.recommendedDrills.map(d=>typeof d==='string'?d:d.name).filter(Boolean).slice(0,3):[];$('#rd').textContent=dd.length?dd.join(', '):'None yet.';
+ $('#prg').textContent=S.v.length>1?'Compare your latest analyses.':'Upload another video to compare your technique.';
+ const lp=S.v.slice().reverse().find(v=>v.plan);
+ $('#imp').innerHTML=l&&focusOf(l.result).length?'<ol style="margin:0;padding-left:18px">'+ul(focusOf(l.result))+'</ol>':'None yet.';
+ $('#lpl').innerHTML=lp?`<a href="#" data-plan="${esc(lp.id)}">${esc(lp.type)} plan · ${Object.keys(lp.plan.done).length}/7 days done</a>`:'None yet. Create one from an analysis.'}
+/* ---- pick / record / validate ---- */
+let objUrl=null,camUsed='',tm,src='',file=null,thumb='',dur=0,busy=false,stream=null,rec=null,chunks=[],cancelled=false,t0=0,cur=null;
+const msg=(t,c)=>{$('#vact').hidden=true;const m=$('#vmsg');m.textContent=t;m.className='msg '+(c||'');m.hidden=false};
+function renderMeta(){const v=$('#pv'),r=(k,x)=>`<p style="margin:0"><b>${k}:</b> ${esc(x)}</p>`;$('#retake').hidden=src!=='cam';$('#rmeta').innerHTML=file?r('Analysis type',type)+r('Duration',fmt(dur))+r('Resolution',v.videoWidth+'×'+v.videoHeight)+r('Camera used',src==='cam'?camUsed:'Gallery file')+r('File size',(file.size/1e6).toFixed(1)+' MB'):''}
+function reset(){file=null;dur=0;thumb='';$('#pick').hidden=false;$('#vmsg').hidden=true;$('#vact').hidden=true;if(objUrl){URL.revokeObjectURL(objUrl);objUrl=null}const v=$('#pv');v.removeAttribute('src');v.load();$('#thumbimg').hidden=true}
+$('#chg').onclick=()=>{if(busy)return;const s=src;reset();go('analyze');if(s==='cam')openCam(lastLive)};
+const LIM='Please select a video between 3 and 90 seconds and under 200 MB.';
+function bad(t){file=null;$('#pick').hidden=false;msg(t,'bad')}
+function onFile(f,hint,s){
+ if(!f||busy)return;
+ const ext=(f.name.split('.').pop()||'').toLowerCase();
+ if(!/^video\//.test(f.type)&&!['mp4','mov','m4v','webm'].includes(ext))return msg('Unsupported video format.','bad');
+ if(!f.size)return msg('This video file is empty.','bad');if(f.size>200e6)return msg('Video must be under 200 MB.','bad');
+ file=f;src=s||'gal';$('#pick').hidden=true;msg('Checking video…');
+ const v=$('#pv');if(objUrl)URL.revokeObjectURL(objUrl);objUrl=URL.createObjectURL(f);v.src=objUrl;
+ v.onerror=()=>{if(file===f)bad("This video appears to be corrupted or can't be read on this device. Try an MP4 (H.264) video or record it again.")};
+ v.onloadedmetadata=()=>{
+  let d=v.duration;if(!isFinite(d))d=hint||0;dur=d;
+  if(d<3)return bad('Video must be at least 3 seconds.');if(d>90)return bad('Video must not exceed 90 seconds.');
+  if(Math.min(v.videoWidth,v.videoHeight)<480)return bad(E.poor+' (resolution below 480p)');
+  const chk=()=>{
+   try{const c=document.createElement('canvas');c.width=c.height=48;const x=c.getContext('2d');x.drawImage(v,0,0,48,48);const q=x.getImageData(0,0,48,48).data;let s2=0;for(let i=0;i<q.length;i+=4)s2+=.2126*q[i]+.7152*q[i+1]+.0722*q[i+2];
+    if(s2/2304<40)return bad(E.poor+' (too dark)');
+    const t=document.createElement('canvas');t.width=160;t.height=Math.round(160*v.videoHeight/v.videoWidth);t.getContext('2d').drawImage(v,0,0,t.width,t.height);thumb=t.toDataURL('image/jpeg',.6)}catch(e){thumb=''}
+   const ti=$('#thumbimg');ti.hidden=!thumb;if(thumb)ti.src=thumb;
+   $('#vmsg').hidden=true;renderMeta();go('review')};
+  if(isFinite(v.duration)){v.onseeked=()=>{v.onseeked=null;chk()};v.currentTime=d/2}else v.onloadeddata=chk}}
+const gal=$('#f_gal'),cam=$('#f_cam');
+gal.onchange=e=>{onFile(e.target.files[0]);gal.value=''};cam.onchange=e=>{camUsed='Phone camera app';onFile(e.target.files[0],0,'cam');cam.value=''};
+gal.oncancel=()=>toast('No video selected.');cam.oncancel=()=>toast('Recording cancelled.');
+/* ---- camera screen (getUserMedia + MediaRecorder) ---- */
+const MIMES=['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm','video/mp4'];
+const pickMime=()=>window.MediaRecorder?(MIMES.find(m=>MediaRecorder.isTypeSupported(m))||''):'';
+const cs={stream:null,rec:null,chunks:[],facing:'environment',live:false,t0:0,pms:0,pa:0,el:0,tm:0,cd:0,raf:0,cancel:false,used:'',torch:false,opening:false};
+let lastLive=false,restricted='';
+const camr=$('#camr'),camb=$('#camb'),pol=document.permissionsPolicy||document.featurePolicy;
+const polOK=()=>{try{return !pol||(pol.allowsFeature('camera')&&pol.allowsFeature('microphone'))}catch(e){return true}};
+const pstate=async n=>{try{return (await navigator.permissions.query({name:n})).state}catch(e){return 'unknown'}};
+function perr(t,retry,rest){msg(t,'bad');const a=$('#vact');a.innerHTML='';
+ const L=[];if(retry)L.push(['Try Again',retry,0]);
+ if(rest)L.push(['Open in Chrome',openChrome,0]);
+ L.push(['Use phone camera app',()=>cam.click(),1]);
+ if(rest)L.push(['Copy link',showLink,1]);
+ L.forEach(x=>{const b=document.createElement('button');b.className='btn'+(x[2]?' ghost':'');b.textContent=x[0];b.onclick=x[1];a.appendChild(b)});a.hidden=false;return false}
+function blockedUI(why){restricted=why;return perr(why+' Or record with your phone camera app and choose the video.',null,true)}
+function showLink(){const u=location.href,m=$('#vmsg');m.className='msg bad';
+ if(!/^https?:/.test(u)){m.textContent='Open this app directly in Chrome, using the link you were given.';m.hidden=false;return}
+ m.innerHTML='Copy this link and open it in Chrome:<input readonly style="width:100%;margin-top:6px;padding:8px" value="'+esc(u)+'">';m.hidden=false;
+ const i=m.querySelector('input');i.focus();i.select();try{navigator.clipboard&&navigator.clipboard.writeText(u).then(()=>toast('Link copied.'),()=>{})}catch(e){}}
+function openChrome(){const u=location.href;
+ try{if(/Android/i.test(navigator.userAgent)&&/^https?:/.test(u)){const x=new URL(u);window.open('intent://'+x.host+x.pathname+x.search+'#Intent;scheme='+x.protocol.slice(0,-1)+';package=com.android.chrome;S.browser_fallback_url='+encodeURIComponent(u)+';end','_blank')}else window.open(u,'_blank')}catch(e){}
+ setTimeout(()=>{if(!document.hidden)showLink()},1500)}
+function envCheck(){
+ let framed=false;try{framed=window.top!==window}catch(e){framed=true}
+ if(!window.isSecureContext)return 'The camera needs a secure (HTTPS) connection. Open the app over HTTPS.';
+ if(!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder))return 'Camera recording is not supported in this browser.'+(framed?' This preview may be restricting it. Open the app directly in Chrome.':'');
+ if(!polOK())return 'Camera access is restricted in this preview. Open the app directly in Chrome to use the camera.';
+ if(/; wv\)/.test(navigator.userAgent))return 'Camera access is restricted in this in-app browser. Open the app directly in Chrome to use the camera.';
+ return ''}
+function camErr(e){const again=()=>openCam(lastLive),n=e&&e.name,quick=Date.now()-cs.req<400;
+ if(n==='NotAllowedError'||n==='SecurityError'){
+  if(/dismiss/i.test((e&&e.message)||''))return perr('The camera permission prompt was closed. Tap Record with Camera and choose Allow.',again);
+  if(n==='SecurityError'||(quick&&cs.pst!=='denied'))return blockedUI('This preview cannot access your camera. Open the app directly in Chrome over HTTPS.');
+  return perr('Camera permission was denied. Allow camera access in Chrome settings and try again.',again)}
+ if(n==='NotFoundError')return perr('No camera was detected on this device.',again);
+ if(n==='NotReadableError')return perr('The camera is being used by another app. Close it and try again.',again);
+ if(n==='OverconstrainedError')return perr("This device can't use the requested camera settings. Try again or use your phone's camera app.",again);
+ if(n==='AbortError')return perr('The camera could not be started. Close other camera apps and try again.',again);
+ return perr('Unable to open the camera'+(e&&e.message?': '+e.message:'.'),again)}
+function stopStream(){if(cs.stream){cs.stream.getTracks().forEach(t=>t.stop());cs.stream=null}$('#cv').srcObject=null}
+async function camStart(facing){
+ cs.req=Date.now();stopStream();const md=navigator.mediaDevices,vc={facingMode:{ideal:facing},width:{ideal:1280},height:{ideal:720}};let s=null;
+ try{s=await md.getUserMedia({video:vc,audio:true})}
+ catch(e){
+  if(e.name==='NotAllowedError'||e.name==='SecurityError'){
+   const sc=await pstate('camera'),sm=await pstate('microphone');cs.pst=sc;
+   if(sc==='granted'&&sm==='denied'){try{s=await md.getUserMedia({video:vc});toast('Recording without sound.')}catch(e2){return camErr(e2)}}else return camErr(e)
+  }else if(e.name==='NotFoundError'||e.name==='OverconstrainedError'){
+   try{s=await md.getUserMedia({video:true,audio:true})}catch(e3){try{s=await md.getUserMedia({video:true});toast('Recording without sound.')}catch(e4){return camErr(e4)}}
+  }else return camErr(e)}
+ cs.stream=s;const v=$('#cv');v.srcObject=s;try{await v.play()}catch(e){}
+ const t=s.getVideoTracks()[0],st=t.getSettings?t.getSettings():{},cp=t.getCapabilities?t.getCapabilities():{};
+ cs.used=st.facingMode==='environment'?'Rear camera':st.facingMode==='user'?'Front camera':(t.label||'Camera');
+ cs.torch=false;$('#cflash').hidden=!cp.torch;$('#cflash').style.background='';return true}
+function camUI(rc){$('#cstart').hidden=rc;$('#cstop').hidden=!rc;$('#cpause').hidden=!rc||typeof MediaRecorder.prototype.pause!=='function';$('#crec').hidden=!rc;$('#cflip').disabled=rc;$('#cdisc').hidden=true;$('#cpause').textContent='⏸'}
+async function openCam(live){
+ if(busy||cs.opening||!$('#camscr').hidden)return;
+ lastLive=!!live;cs.live=!!live;$('#vmsg').hidden=true;$('#vact').hidden=true;
+ const why=restricted||envCheck();
+ if(why){blockedUI(why);if(!live)cam.click();return}
+ cs.opening=true;camr.disabled=camb.disabled=true;
+ try{
+  if(!(await camStart(cs.facing)))return;
+  $('#camscr').hidden=false;camUI(false);$('#ctimer').textContent='0:00 / 1:30';document.body.style.overflow='hidden';
+  pstate('camera').then(s=>{$('#cpm').textContent='Camera permission: '+s});
+  const ps=$('#cpose');ps.hidden=!cs.live;ps.textContent='Pose detection: '+(POSE.engine?'on':'not connected');
+  try{history.pushState({v:'analyze',cam:1},'')}catch(e){}
+  if(cs.live)poseLoop()
+ }finally{cs.opening=false;camr.disabled=camb.disabled=false}}
+function closeCam(){
+ clearInterval(cs.cd);cs.cd=0;clearInterval(cs.tm);cancelAnimationFrame(cs.raf);$('#ccount').hidden=true;
+ const r=cs.rec;if(r&&r.state!=='inactive'){cs.cancel=true;try{r.stop()}catch(e){}}
+ cs.rec=null;stopStream();$('#camscr').hidden=true;$('#cdisc').hidden=true;document.body.style.overflow=''}
+function camGo(){
+ if(cs.cd||(cs.rec&&cs.rec.state!=='inactive'))return;
+ let n=3;const c=$('#ccount');c.hidden=false;c.textContent=n;$('#cstart').hidden=true;$('#cflip').disabled=true;
+ cs.cd=setInterval(()=>{n--;if(n>0){c.textContent=n;return}clearInterval(cs.cd);cs.cd=0;c.hidden=true;camRec()},1000)}
+function camRec(){
+ if(!cs.stream)return;
+ cs.chunks=[];cs.cancel=false;const mt=pickMime();let r;
+ try{r=mt?new MediaRecorder(cs.stream,{mimeType:mt}):new MediaRecorder(cs.stream)}catch(e){camUI(false);return toast('Recording is not supported with this camera format.')}
+ cs.rec=r;
+ r.ondataavailable=e=>{if(e.data&&e.data.size)cs.chunks.push(e.data)};
+ r.onstop=()=>{clearInterval(cs.tm);
+  if(cs.cancel){closeCam();return toast('Recording discarded.')}
+  const ty=r.mimeType||mt||'video/webm',secs=(Date.now()-cs.t0-cs.pms)/1000,used=cs.used;
+  const f=new File(cs.chunks,'recording-'+Date.now()+(ty.includes('mp4')?'.mp4':'.webm'),{type:ty});
+  closeCam();camUsed=used;onFile(f,secs,'cam')};
+ r.start(1000);cs.t0=Date.now();cs.pms=0;cs.el=0;camUI(true);
+ cs.tm=setInterval(()=>{const el=(Date.now()-cs.t0-cs.pms-(r.state==='paused'?Date.now()-cs.pa:0))/1000;cs.el=el;$('#ctimer').textContent=fmt(el)+' / 1:30';if(el>=90&&r.state!=='inactive')r.stop()},250)}
+const POSE={engine:null}; /* plug in a pose engine here: {detect(videoEl,timestampMs) -> [{x,y}] normalized 0..1, or null} */
+function poseLoop(){
+ if($('#camscr').hidden||!cs.live)return;
+ const v=$('#cv'),c=$('#cvo'),g=c.getContext('2d');c.width=c.clientWidth;c.height=c.clientHeight;g.clearRect(0,0,c.width,c.height);
+ const L=POSE.engine&&v.videoWidth?POSE.engine.detect(v,performance.now()):null;
+ if(L){const s=Math.min(c.width/v.videoWidth,c.height/v.videoHeight),ox=(c.width-v.videoWidth*s)/2,oy=(c.height-v.videoHeight*s)/2;g.fillStyle='#4a9e64';L.forEach(q=>{g.beginPath();g.arc(ox+q.x*v.videoWidth*s,oy+q.y*v.videoHeight*s,4,0,7);g.fill()})}
+ cs.raf=requestAnimationFrame(poseLoop)}
+camr.onclick=()=>openCam(false);camb.onclick=()=>openCam(true);
+$('#cstart').onclick=camGo;
+$('#cstop').onclick=()=>{if(cs.el<3)return toast('Record at least 3 seconds.');if(cs.rec&&cs.rec.state!=='inactive')cs.rec.stop()};
+$('#cpause').onclick=()=>{const r=cs.rec;if(!r)return;if(r.state==='recording'){r.pause();cs.pa=Date.now();$('#cpause').textContent='▶'}else if(r.state==='paused'){r.resume();cs.pms+=Date.now()-cs.pa;$('#cpause').textContent='⏸'}};
+$('#cclose').onclick=()=>{if(cs.rec&&cs.rec.state!=='inactive')$('#cdisc').hidden=false;else closeCam()};
+$('#cdo').onclick=()=>{$('#cdisc').hidden=true;closeCam()};
+$('#cdk').onclick=()=>{$('#cdisc').hidden=true};
+$('#retake').onclick=()=>{if(busy)return;const nat=camUsed==='Phone camera app',lv=lastLive;reset();go('analyze');if(nat)cam.click();else openCam(lv)};
+addEventListener('pagehide',closeCam);
+$('#cflip').onclick=async()=>{const f=cs.facing;cs.facing=f==='environment'?'user':'environment';if(!(await camStart(cs.facing))){cs.facing=f;closeCam()}};
+$('#cflash').onclick=async()=>{const t=cs.stream&&cs.stream.getVideoTracks()[0];if(!t)return;cs.torch=!cs.torch;try{await t.applyConstraints({advanced:[{torch:cs.torch}]})}catch(e){cs.torch=!cs.torch;toast('Flash is not available on this camera.')}$('#cflash').style.background=cs.torch?'#4a9e64':''};
+addEventListener('pagehide',closeCam);
+document.addEventListener('visibilitychange',async()=>{if(!document.hidden&&!$('#vact').hidden&&await pstate('camera')==='granted'){$('#vmsg').hidden=true;$('#vact').hidden=true}});
+/* ---- upload -> processing -> results ---- */
+const STG=['Uploading video…','Preparing video…','Analyzing movement…','Evaluating cricket technique…','Generating coaching feedback…'];
+const snake=t=>t.toLowerCase().replace(/ /g,'_');
+const SI={preparing:1,analyzing:2,detecting:2,evaluating:3,generating:4};
+function stage(i,f){$('#stg').innerHTML=STG.map((s,k)=>`<li class="${k<i?'ok':k===i?'on':''}">${s}${k===0&&i===0&&f?' '+Math.round(f*100)+'%':''}</li>`).join('');$('#pb').style.width=Math.min(100,(i+(f||0))*20)+'%'}
+const NC=up=>'<p><b>Analysis unavailable</b></p><p><b>'+(up?'Video uploaded successfully. ':'')+'AI video analysis is not configured yet.</b></p><p>Connect a computer-vision/pose-analysis service to enable real technique analysis.</p>'+(up?'':'<p class="mute">Your video stayed on this device. Nothing was uploaded.</p>');
+function stop(m,cls,html,noretry){busy=false;const e=$('#pferr');e.className='msg '+(cls==null?'bad':cls);if(html)e.innerHTML=html;else e.textContent=m;e.hidden=false;$('#pact').hidden=false;$('#pretry').hidden=!!noretry}
+function nocfg(up){if(up)return stop('','',NC(true),1);busy=false;const e=$('#rmsg');e.innerHTML=NC(false);e.hidden=false}
+/* service layer: resolves with the backend response, rejects with {code} */
+function analyzeCricketVideo(videoFile,analysisType,onStage){
+ return new Promise((resolve,reject)=>{
+  if(!videoFile)return reject({code:'no_video'});
+  if(API_BASE==null)return reject({code:'not_configured'});
+  const poll=async(id,n)=>{try{const r=await fetch(API_BASE+'/api/analyze-video/'+id,{credentials:'include'});if(!r.ok)throw 0;const j=await r.json();
+   if(j.status==='complete'||j.overallObservation!==undefined)return resolve(j);
+   if(j.status==='failed')return reject({code:j.code||'failed'});
+   onStage(SI[j.status]||1,0);if(n>150)return reject({code:'timeout'});setTimeout(()=>poll(id,n+1),2000)}catch(e){reject({code:'failed'})}};
+  const fd=new FormData();fd.append('video',videoFile);fd.append('analysisType',analysisType);fd.append('playerProfile',JSON.stringify(S.p));
+  fd.append('playerGoal',$('#n_goal').value.trim());fd.append('shotOrDelivery',$('#n_shot').value.trim());fd.append('problem',$('#n_prob').value.trim());
+  const x=new XMLHttpRequest();x.open('POST',API_BASE+'/api/analyze-video');x.withCredentials=true;
+  x.upload.onprogress=e=>e.lengthComputable&&onStage(0,e.loaded/e.total);
+  x.upload.onload=()=>onStage(1,0);
+  x.onerror=()=>reject({code:'upload'});
+  x.onload=()=>{let j={};try{j=JSON.parse(x.responseText)}catch(e){}
+   if(x.status===401||x.status===403)return reject({code:'auth'});
+   if(x.status===501||j.code==='not_configured')return reject({code:'not_configured'});
+   if(x.status===422||j.code==='poor_video')return reject({code:'poor_video'});
+   if(x.status>=500)return reject({code:'server'});
+   if(x.status>=400)return reject({code:'upload'});
+   if(j.status==='complete'||j.overallObservation!==undefined)return resolve(j);
+   if(j.jobId||j.job_id){onStage(1,0);return poll(j.jobId||j.job_id,0)}
+   reject({code:'failed'})};
+  x.send(fd)})}
+function done(j,row,path){
+ const r=j.analysis||j.result||(j.overallObservation!==undefined?j:null);
+ if(!(r&&typeof r.overallObservation==='string'&&['strengths','possibleIssues','recommendedDrills','limitations'].every(k=>Array.isArray(r[k]))))return stop(E.sw);
+ if(String(r.videoQuality).toLowerCase()==='insufficient')return stop(E.poor);
+ const vid=j.videoId||j.video_id||null,id=row&&row.id?String(row.id):String(vid||Date.now());
+ const o={id,videoId:vid,path:path||null,userId:(session&&session.user.id)||S.p.uid||'local',date:new Date().toISOString(),type,analysisType:snake(type),name:file.name,thumb,playerGoal:$('#n_goal').value.trim(),shotOrDelivery:$('#n_shot').value.trim(),result:r,plan:null,area:focusOf(r)[0]||''};
+ BLOB[id]=$('#pv').src;objUrl=null;S.v.push(o);save();busy=false;
+ $('#ph').textContent='Analysis Complete';stage(5,0);
+ $('#n_goal').value=$('#n_shot').value=$('#n_prob').value='';reset();
+ setTimeout(()=>openRes(id),900)}
+async function uploadVideo(f){
+ const path=session.user.id+'/'+Date.now()+'-'+f.name.replace(/[^a-zA-Z0-9_.-]/g,'_');
+ const {error}=await sb.storage.from(BUCKET).upload(path,f,{contentType:f.type||'video/mp4'});
+ if(error)throw error;return path}
+async function persistAnalysis(path,result){
+ if(!sb||!session)return null;
+ const row={user_id:session.user.id,type,analysis_type:snake(type),video_path:path,player_goal:$('#n_goal').value.trim()||null,shot_or_delivery:$('#n_shot').value.trim()||null,result:result,area:result?(focusOf(result)[0]||null):null};
+ try{const {data,error}=await sb.from('analyses').insert(row).select().single();return error?null:data}catch(e){return null}}
+async function start(){
+ if(busy||!file)return;
+ $('#rmsg').hidden=true;
+ busy=true;$('#pferr').hidden=true;$('#pact').hidden=true;$('#ph').textContent='Analyzing your video…';stage(0,0);go('process');
+ let path=null,cloud=false;
+ if(sb&&session){
+  try{path=await uploadVideo(file);cloud=true}
+  catch(e){busy=false;return stop(E.up)}}
+ if(API_BASE==null){
+  if(cloud)persistAnalysis(path,null);
+  return nocfg(cloud)}
+ try{
+  const j=await analyzeCricketVideo(file,snake(type),stage);
+  const r=j.analysis||j.result||(j.overallObservation!==undefined?j:null);
+  const row=cloud?await persistAnalysis(path,r):null;
+  done(j,row,path)}
+ catch(e){const c=e&&e.code;
+  if(c==='not_configured'){if(cloud)persistAnalysis(path,null);return nocfg(cloud)}
+  stop(c==='poor_video'?E.poor:c==='auth'?'Please sign in again to analyze videos.':c==='upload'?E.up:(c==='server'||c==='timeout')?E.ai:E.sw)}}
+$('#go').onclick=start;
+$('#pretry').onclick=()=>{if(file)start();else go('analyze')};
+$('#pback').onclick=()=>{reset();go('analyze')};
+/* ---- results, plan, history ---- */
+const ul=a=>a.map(x=>`<li>${esc(x)}</li>`).join('');
+const cap=s=>s?String(s)[0].toUpperCase()+String(s).slice(1):'';
+const RANK={high:0,medium:1,low:2};
+const focusOf=r=>Array.isArray(r.trainingFocus)&&r.trainingFocus.length?r.trainingFocus:r.possibleIssues.slice().sort((a,b)=>(RANK[String(a.confidence).toLowerCase()]??3)-(RANK[String(b.confidence).toLowerCase()]??3)).map(i=>i.issue).slice(0,3);
+const pk=(o,...k)=>{for(const x of k)if(o[x]!=null&&o[x]!=='')return o[x];return ''};
+function renderResult(r){
+ const dr=r.recommendedDrills.map(d=>typeof d==='string'?{name:d}:d),F=focusOf(r),q=String(r.videoQuality||'').toLowerCase(),u=cur&&BLOB[cur.id];
+ return `${u?`<video id="rv" src="${u}" controls playsinline></video><div class="row" style="margin-bottom:10px"><button class="btn ghost" data-rate="0.25">0.25×</button><button class="btn ghost" data-rate="0.5">0.5×</button><button class="btn ghost" data-rate="1">1×</button></div>`:''}
+ ${q==='poor'?'<div class="msg bad">Unable to assess this movement reliably from the uploaded video.</div>':''}
+ <div class="msg"><span class="pill live">From your video</span> ${r.videoQuality?`<span class="pill">Video quality: ${esc(cap(r.videoQuality))}</span>`:''} ${r.confidence?`<span class="pill">Confidence: ${esc(cap(r.confidence))}</span>`:''}<p style="margin:8px 0 0"><b>Overall observation.</b> ${esc(r.overallObservation)}</p></div>
+ <h3>✅ Strengths</h3><ul>${ul(r.strengths)||'<li class="mute">Nothing could be assessed reliably.</li>'}</ul>
+ <h3>⚠️ Areas to improve</h3>${r.possibleIssues.map(i=>`<div class="card" style="margin-bottom:10px"><b>${esc(i.issue)}</b> <span class="pill">Confidence: ${esc(cap(i.confidence))}</span>${String(i.confidence).toLowerCase()==='low'?'<p class="mute">The camera angle or video quality makes this observation uncertain.</p>':''}<p><b>What was observed:</b> ${esc(pk(i,'evidence','observed'))}</p><p><b>Why it matters:</b> ${esc(pk(i,'whyItMatters','why_it_matters'))}</p><p><span class="pill">Coaching advice</span> <b>How to improve:</b> ${esc(pk(i,'recommendation','correction'))}</p>${i.drill?`<p><b>Drill recommendation:</b> ${esc(i.drill)}</p>`:''}</div>`).join('')||'<p class="mute">No issues with enough visible evidence.</p>'}
+ <h3>🎯 Priority focus</h3><ol>${ul(F)||'<li class="mute">None identified.</li>'}</ol>
+ ${Array.isArray(r.timeline)&&r.timeline.length?`<h3>Video timeline</h3><ul>${r.timeline.map(t=>`<li>${typeof t.time==='number'?`<a href="#" data-seek="${t.time}">${fmt(t.time)}</a>`:esc(t.time)} — ${esc(t.label)}</li>`).join('')}</ul>`:''}
+ <h3>Recommended drills</h3><span class="pill">Coaching advice</span>${dr.map(d=>`<div class="card" style="margin:8px 0"><b>${esc(d.name||'Drill')}</b> ${d.difficulty?`<span class="pill">${esc(d.difficulty)}</span>`:''}<p><b>Purpose:</b> ${esc(pk(d,'purpose','objective'))}</p><p><b>Instructions:</b> ${esc(d.instructions||'')}</p><p><b>Duration:</b> ${esc(d.duration||'')}</p><p><b>Common mistakes:</b> ${esc(pk(d,'commonMistakes','common_mistakes'))}</p></div>`).join('')||'<p class="mute">No drills returned.</p>'}
+ <h3>Video limitations</h3><ul>${ul(r.limitations)||'<li class="mute">None reported.</li>'}</ul>
+ <p class="mute">AI feedback is for training guidance and should not replace a qualified cricket coach or medical professional.</p>`}
+function openRes(id){cur=S.v.find(v=>String(v.id)===String(id));if(!cur)return;$('#rbody').innerHTML=renderResult(cur.result);$('#mkplan').textContent=cur.plan?'View My 7-Day Training Plan':'Create My 7-Day Training Plan';go('results')}
+function makePlan(o){
+ const p=S.p,r=o.result,D=r.recommendedDrills.map(d=>typeof d==='string'?{name:d}:d),F=focusOf(r),L=p.level;
+ const mins={Beginner:20,Intermediate:30,Advanced:40}[L]||30,sets=L==='Beginner'?2:L==='Advanced'?4:3,diff=L==='Advanced'?'Hard':L==='Beginner'?'Easy':'Medium';
+ const fo=i=>F.length?F[i%F.length]:'core technique',sd=o.shotOrDelivery||o.type.toLowerCase()+' technique',rest='60-90 seconds between sets',safe='Warm up first. Stop if you feel pain and see a qualified coach or medical professional.';
+ const ex=(title,obj,i,x)=>{const d=D.length?D[i%D.length]:null;return Object.assign({title,objective:obj,drill:d&&d.name||'Slow shadow practice',sets:String(sets),reps:d&&d.duration||'6 reps',rest,ins:d&&d.instructions||'Practise '+sd+' slowly, ideally with someone watching.',diff:d&&d.difficulty||diff,safe},x||{})};
+ const days=[
+ ex('Technique correction','Improve '+fo(0)+(o.playerGoal?' (your goal: '+o.playerGoal+')':''),0),
+ ex('Footwork drills','Build footwork for your '+sd+', focusing on '+fo(1),1),
+ ex('Strength and mobility','Support balance and stability for '+(p.role||'your game'),0,{drill:'Bodyweight strength and mobility',ins:'Squats, lunges, planks, and hip and shoulder mobility at an easy effort.',reps:'8-10 reps',rest:'45-60 seconds between sets',diff:'Easy'}),
+ ex('Skill repetition','Repeat '+fo(0)+' until it feels natural',0),
+ ex('Match simulation','Use '+sd+' in a short practice session as a '+(p.role||'player'),2,{drill:'Practice session',ins:'Warm up, then play a short game or net session applying '+fo(0)+'.',sets:'1',reps:mins+' min',rest:'Rest between spells and stay hydrated'}),
+ ex('Video reassessment','Check your progress with a new video',0,{drill:'Record a new '+o.type+' video',ins:'Film again from the same angle and compare it with this analysis.',sets:'1',reps:'1 clip',rest:'None needed',diff:'Easy'}),
+ ex('Recovery and review','Recover and review the week',0,{drill:'Easy walk and stretching',ins:'Keep it light, then note what felt better or worse.',sets:'1',reps:'15-20 min',rest:'Full rest from hard practice',diff:'Easy'})];
+ const keep=[0,2,1,4,5,6,3].slice(0,Math.min(7,parseInt(p.days)||7));
+ return days.map((d,i)=>keep.includes(i)?d:{title:'Rest day',objective:'Recover between training days',drill:'Rest or an easy walk',sets:'-',reps:'-',rest:'-',ins:'Light movement only.',diff:'Easy',safe})}
+function showPlan(){
+ $('#pbody').innerHTML=cur.plan.days.map((d,i)=>`<label class="card day"><input type="checkbox" data-day="${i}" ${cur.plan.done[i]?'checked':''}><span><b>Day ${i+1}: ${esc(d.title)}</b><br><b>Objective:</b> ${esc(d.objective)}<br><b>Exercise:</b> ${esc(d.drill)}<br><b>Sets:</b> ${esc(d.sets)} · <b>Reps or duration:</b> ${esc(d.reps)}<br><b>Rest:</b> ${esc(d.rest)}<br><b>Coaching instruction:</b> ${esc(d.ins)}<br><b>Difficulty:</b> ${esc(d.diff)}<br><b>Safety note:</b> ${esc(d.safe)}</span></label>`).join('');go('plan')}
+$('#mkplan').onclick=()=>{if(!cur)return;if(!cur.plan){cur.plan={days:makePlan(cur),done:{}};save()}showPlan()};
+$('#pbody').onchange=e=>{const i=e.target.dataset.day;if(i==null)return;if(e.target.checked)cur.plan.done[i]=key(new Date());else delete cur.plan.done[i];save()};
+async function delRec(id,btn){
+ if(!btn.dataset.arm){btn.dataset.arm=1;btn.dataset.t=btn.textContent;btn.textContent='Tap again to delete';setTimeout(()=>{btn.dataset.arm='';btn.textContent=btn.dataset.t},4000);return}
+ const v=S.v.find(x=>String(x.id)===String(id));if(!v)return;
+ if(API_BASE!=null&&v.videoId){let ok=false;try{ok=(await fetch(API_BASE+'/api/videos/'+v.videoId,{method:'DELETE',credentials:'include'})).ok}catch(e){}
+  if(!ok)return toast("Couldn't delete the stored video on the server. Nothing was removed. Please try again.")}
+ if(sb&&session&&(v.path||typeof v.id==='string')){
+  try{if(v.path)await sb.storage.from(BUCKET).remove([v.path]);await sb.from('analyses').delete().eq('id',v.id).eq('user_id',session.user.id)}
+  catch(e){return toast("Couldn't delete from your account. Please try again.")}}
+ if(BLOB[v.id]){URL.revokeObjectURL(BLOB[v.id]);delete BLOB[v.id]}S.v=S.v.filter(x=>x!==v);save();toast('Analysis deleted.');if(cur===v)cur=null;go('history')}
+function hist(){$('#hlist').innerHTML=S.v.length?S.v.slice().reverse().map(v=>`<div class="card row" style="margin-bottom:10px;align-items:center;flex-wrap:nowrap"><a href="#" data-open="${esc(v.id)}" style="display:flex;gap:12px;flex:1;text-decoration:none;align-items:center">${v.thumb?`<img class="thumb" src="${v.thumb}" alt="">`:''}<span><b>${esc(v.type)}</b> · ${when(v)}<br><span class="mute">Complete · ${esc(v.area||'no focus area listed')}</span></span></a><button class="btn ghost" data-del="${esc(v.id)}">Delete</button></div>`).join(''):'<p class="mute">No analyses yet. Upload a video from Analyze.</p>'}
+document.addEventListener('click',e=>{
+ const o=e.target.closest('[data-open]'),d=e.target.closest('[data-del]'),c=e.target.closest('[data-del-cur]');
+ if(o){e.preventDefault();openRes(o.dataset.open)}
+ const pl=e.target.closest('[data-plan]');if(pl){e.preventDefault();cur=S.v.find(v=>String(v.id)===pl.dataset.plan);if(cur&&cur.plan)showPlan()}
+ if(d)delRec(d.dataset.del,d);
+ if(c&&cur)delRec(cur.id,c);
+ const rt=e.target.closest('[data-rate]'),sk=e.target.closest('[data-seek]'),rv=$('#rv');if(rt&&rv)rv.playbackRate=+rt.dataset.rate;if(sk&&rv){e.preventDefault();rv.currentTime=+sk.dataset.seek;rv.play()}});
+const BLOB={};
+const LIB={
+'Batting':[['Front-foot drive','3 sets of 8 reps','Step to the pitch of the ball, head over the front knee, and drive along the line.','Medium'],['Back-foot movement','3 sets of 8 reps','Move back and across, stay balanced, and play the ball late.','Medium'],['Defensive technique','3 sets of 10 reps','Soft hands, bat close to the pad, head still.','Easy'],['Cover drive','3 sets of 8 reps','Front foot to the pitch, high elbow, full follow-through.','Medium'],['Straight drive','3 sets of 8 reps','Stay side-on, swing straight, and finish balanced.','Medium'],['Pull shot','3 sets of 6 reps','Get inside the line, rotate the hips, and keep the head steady.','Hard'],['Cut shot','3 sets of 6 reps','Wait for width, move back, and play with high hands.','Medium'],['Head-position drill','3 sets of 10 reps','Play drop-fed balls and hold your finish with the head over the front knee.','Easy']],
+'Fast Bowling':[['Run-up rhythm','4 sets of 6 run-ups','Repeat your run-up at 70% pace and hit the same marks each time.','Easy'],['Front-leg stability','3 sets of 8 reps','Land with a braced front leg and hold the finish for 2 seconds.','Medium'],['Alignment drill','3 sets of 6 reps','Keep hips and shoulders side-on at landing, using a line as a guide.','Medium'],['Release drill','3 sets of 8 reps','Bowl from a standing start at half pace and release at the highest point.','Medium'],['Follow-through drill','3 sets of 6 reps','Run through after release and slow down over 3 steps.','Easy']],
+'Spin Bowling':[['Wrist and finger control','3 sets of 10 reps','Practise your grip and spin with a slow, controlled release.','Medium'],['Release drill','3 sets of 8 reps','Release to a target from a standing start with a steady head.','Easy'],['Accuracy drill','4 sets of 6 balls','Place a marker on a good length and aim to land most balls on it.','Medium'],['Flight and variation practice','3 sets of 6 balls','Change pace and height of release while keeping the same action.','Hard']],
+'Wicketkeeping':[['Stance and crouch hold','3 sets of 20 seconds','Stay balanced on the balls of your feet with head still and hands together.','Easy'],['Glove-work catches','3 sets of 10 reps','Catch soft tosses with soft hands and give with the ball.','Medium'],['Footwork to the ball','3 sets of 8 reps','Move sideways to the line, stay low, and take the ball late.','Medium']],
+'Fielding':[['Ready-position start','4 sets of 6 reps','Stay low on the balls of your feet and take a quick first step.','Easy'],['Pickup and throw','3 sets of 8 reps','Field a rolling ball, step, and throw to a target.','Medium'],['Throwing mechanics','3 sets of 8 reps','Point your front shoulder at the target and finish with your chest facing it.','Medium']],
+'Fitness':[['Mobility','2 sets of 10 per side','Hip circles, trunk rotations and shoulder mobility at easy effort.','Easy'],['Core','3 sets of 30 seconds','Planks and side planks with a neutral spine.','Medium'],['Lower body','3 sets of 10 reps','Squats and lunges with a controlled tempo.','Medium'],['Upper body','3 sets of 10 reps','Push-ups and band rows at a smooth pace.','Medium'],['Conditioning','6 rounds of 30 seconds','Easy shuttle runs with a full walk-back recovery.','Medium']]};
+function showLib(c){$('#lib').innerHTML=(LIB[c]||[]).map(d=>`<div class="card" style="margin-bottom:10px"><b>${esc(d[0])}</b> <span class="pill">${d[3]}</span><p><b>Sets and reps:</b> ${d[1]} · <b>Rest:</b> 60-90 seconds</p><p>${esc(d[2])}</p></div>`).join('')+'<p class="mute">Warm up first. Stop if you feel pain and see a qualified coach or medical professional.</p>'}
+$('#c_lib').onchange=()=>showLib(val('lib'));
+function showProg(){
+ const l=S.v[S.v.length-1],pv=l&&S.v.slice(0,-1).reverse().find(v=>v.type===l.type),e=$('#prog2');
+ if(!l||!pv){e.innerHTML='<p class="mute">Upload another video to compare your technique.</p>';return}
+ const nm=v=>v.result.possibleIssues.map(i=>String(i.issue)),k=s=>s.toLowerCase().trim(),A=nm(pv),B=nm(l),ka=new Set(A.map(k)),kb=new Set(B.map(k));
+ const sec=(t,a)=>`<h3>${t}</h3><ul>${ul(a)||'<li class="mute">None</li>'}</ul>`;
+ e.innerHTML=`<p class="mute">${esc(l.type)}: ${when(pv)} compared with ${when(l)}. This compares reported observations only and is not a score.</p>`+sec('Repeated issues',B.filter(x=>ka.has(k(x))))+sec('New observations',B.filter(x=>!ka.has(k(x))))+sec('Not reported in the latest video',A.filter(x=>!kb.has(k(x))))}
+$('#rem').onclick=()=>{if(!busy){reset();go('analyze')}};
+$('#delall').onclick=async e=>{const b=e.currentTarget,t='Delete all analysis history';
+ if(!b.dataset.arm){b.dataset.arm=1;b.textContent='Tap again to delete everything';setTimeout(()=>{b.dataset.arm='';b.textContent=t},4000);return}
+ if(API_BASE!=null)for(const v of S.v)if(v.videoId){let ok=false;try{ok=(await fetch(API_BASE+'/api/videos/'+v.videoId,{method:'DELETE',credentials:'include'})).ok}catch(x){}if(!ok)return toast("Some stored videos couldn't be deleted on the server. Please try again.")}
+ if(sb&&session){
+  try{const paths=S.v.map(v=>v.path).filter(Boolean);if(paths.length)await sb.storage.from(BUCKET).remove(paths);await sb.from('analyses').delete().eq('user_id',session.user.id)}
+  catch(e){return toast("Couldn't delete everything from your account. Please try again.")}}
+ S.v=[];save();b.dataset.arm='';b.textContent=t;toast('All analyses deleted.')};
+history.replaceState&&(()=>{try{history.replaceState({v:'home'},'')}catch(e){}})();
+(()=>{let f=false;try{f=window.top!==window}catch(e){f=true}if(f||/; wv\)/.test(navigator.userAgent))$('#gfix').hidden=false;$('#gchr').onclick=openChrome})();
+go('home',false);
+</script></body></html>
