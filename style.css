@@ -1,0 +1,21 @@
+:root{--bg:#f2f5ef;--card:#fff;--ink:#12241a;--mute:#56685c;--line:#d3dcd0;--pitch:#1f4d2e;--onp:#f2f5ef;--seam:#b3261e;--sand:#e6dfc8}
+@media(prefers-color-scheme:dark){:root{--bg:#0e1a13;--card:#15271c;--ink:#e9efe6;--mute:#9db0a2;--line:#274031;--pitch:#4a9e64;--onp:#0e1a13;--seam:#e0564c;--sand:#2a3a2e}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Barlow,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:820px;margin:0 auto;padding:20px 16px 40px}
+h1,h2,h3{font-family:'Barlow Condensed','Arial Narrow',sans-serif;line-height:1.1;letter-spacing:.01em;margin:1.2em 0 .4em}
+h1{font-size:clamp(2.4rem,9vw,3.8rem);margin-top:.4em}h2{font-size:1.9rem}h3{font-size:1.3rem}
+p,li,dd{max-width:68ch}p{margin:0 0 .9em}ul,ol{padding-left:1.3em}li{margin-bottom:.5em}
+a{color:var(--pitch)}a:focus-visible,summary:focus-visible{outline:3px solid var(--seam);outline-offset:2px}
+.mute{color:var(--mute)}
+header.site{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--line)}
+header.site .brand{font:700 1.4rem 'Barlow Condensed','Arial Narrow',sans-serif;text-decoration:none;color:var(--ink)}
+.topnav{display:flex;flex-wrap:wrap;gap:4px 14px}.topnav a{text-decoration:none;color:var(--mute);font-size:.92rem;padding:4px 0}
+.topnav a[aria-current=page]{color:var(--pitch);font-weight:600}
+.crumbs{font-size:.85rem;color:var(--mute);margin:8px 0 0}.crumbs a{color:inherit}
+details.qa{border-bottom:1px solid var(--line);padding:10px 0}details.qa summary{cursor:pointer;font-weight:600}details.qa p{margin:.6em 0 0}
+dl dt{font-weight:700;margin-top:1em}dl dd{margin:.2em 0 0}
+.msg{background:var(--sand);border-left:5px solid var(--seam);border-radius:10px;padding:12px;margin:1em 0}
+article{border-top:1px solid var(--line);margin-top:1.5em;padding-top:.5em}
+footer.site{border-top:1px solid var(--line);background:var(--card);padding:20px 16px;font-size:.9rem}
+footer.site p{max-width:820px;margin:0 auto .7em}

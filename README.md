@@ -1,87 +1,81 @@
 # AI Cricket Coach
 
-A mobile-first web app for cricket players to record or upload a technique video,
-review it, and (once a computer-vision backend is connected) get AI coaching
-feedback, drills, and a 7-day training plan.
+An AI-powered cricket video analysis and training platform for cricket players.
+Static frontend (`index.html`) + a small Vercel serverless API (`/api`) that calls
+Google's Gemini to actually analyze uploaded videos, + Supabase for accounts,
+profiles and private video storage.
 
-This is a static, single-page app (`index.html`) with no build step. Backend
-data (accounts, profiles, uploaded videos) is handled by Supabase.
+## Structure
+- `index.html` — the app (home, profile, dashboard, analyze, results, plan), with SEO metadata and JSON-LD
+- `api/` — Vercel serverless functions:
+  - `analyze-video.js` — POST: starts a job (uploads the video to Gemini's Files API)
+  - `analyze-video/[jobId].js` — GET: polls Gemini and runs the analysis once the file is ready
+  - `videos/[videoId].js` — DELETE: removes a stored video + its analysis row
+  - `_lib/` — Supabase auth helper, the Gemini system prompt, the Gemini API wrapper, and
+    a "shape.js" normalizer that guarantees safe defaults even if Gemini's JSON is imperfect
+- Content hub: `how-it-works.html`, `ai-cricket-video-analysis.html`, `batting-analysis.html`,
+  `bowling-analysis.html`, `cricket-drills.html`, `cricket-technique.html`, `cricket-glossary.html`,
+  `faq.html`, `blog/index.html`, `about.html`
+- `assets/style.css`, `robots.txt`, `sitemap.xml`, `llms.txt`, `scripts/`
+- `supabase/setup.sql` — tables, RLS policies, private storage bucket (safe to re-run)
 
-## What's real today
+## How analysis works
+1. The browser uploads the video straight to a private Supabase Storage bucket and creates a
+   short-lived signed URL for it (the video is never uploaded a second time to your server).
+2. `POST /api/analyze-video` receives that signed URL, creates a row in the `analyses` table,
+   and starts uploading the video to Gemini's Files API.
+3. The browser polls `GET /api/analyze-video/{jobId}` every few seconds. Once Gemini's file is
+   ready, one poll performs the actual `generateContent` call (with the full cricket-analysis
+   system prompt in `api/_lib/prompt.js`) and stores the structured JSON result.
+4. Every request runs as the signed-in user (their own Supabase access token is sent as a
+   Bearer header) — the backend never uses a Supabase service-role key, so the same
+   row-level-security policies protect it as protect the browser.
 
-- **Accounts:** email/password sign up and sign in (Supabase Auth)
-- **Profile:** saved to the `profiles` table, synced per account
-- **Video upload:** recorded/selected videos are validated (length, size,
-  resolution, brightness) and uploaded to a private Supabase Storage bucket
-- **History:** analyses are saved in the `analyses` table
-- **Camera:** real device camera recording via `getUserMedia` + `MediaRecorder`
-  when served over HTTPS, with a phone-camera-app fallback everywhere else
+## Setup
 
-## What's NOT connected yet
+### 1. Supabase
+Run `supabase/setup.sql` in the Supabase SQL Editor (safe to re-run). It's already using
+project `qzxslpattuzeqwwahzxm` with the publishable key embedded in `index.html` and
+`api/_lib/supabase.js` — both are safe to expose publicly.
 
-- **AI / computer-vision analysis.** There is no model wired up. The app is
-  built to call `POST {API_BASE}/api/analyze-video` (see the comment above
-  `const API_BASE` in `index.html` for the exact request/response contract),
-  but `API_BASE` is `null` until you point it at a real service. Until then,
-  the app is honest about this and shows "Analysis unavailable" /
-  "AI video analysis is not configured yet."
+### 2. Gemini
+Get an API key at https://aistudio.google.com/apikey. You'll add it as an environment
+variable in the next step — never put it in `index.html` or commit it to git.
 
-## 1. Set up Supabase
+### 3. Deploy (Vercel required)
+This project needs a host that runs the `/api` serverless functions alongside the static
+files — **Vercel** is the easiest fit for this repo as-is (Netlify or another provider would
+need the API rewritten for their function format).
 
-1. Open your project at https://supabase.com/dashboard (project ref:
-   `qzxslpattuzeqwwahzxm`).
-2. Go to **SQL Editor → New query**, paste the contents of
-   `supabase/setup.sql`, and run it. This creates:
-   - `profiles` and `analyses` tables with row-level security
-     (each user can only see/edit their own rows)
-   - a private Storage bucket named `cricket-videos` with matching policies
-3. (Optional) Under **Authentication → Providers → Email**, turn email
-   confirmation off if you want new accounts to be usable immediately
-   without clicking a confirmation link.
-
-The app already has your project URL and publishable (anon) key hard-coded
-in `index.html` — search for `SUPABASE_URL` / `SUPABASE_ANON_KEY` if you ever
-need to point it at a different project.
-
-## 2. Deploy
-
-This is a single static HTML file, so any static host works. Pick one:
-
-**Vercel**
 ```
 npm i -g vercel
 cd ai-cricket-coach
+npm install
 vercel --prod
 ```
+Then in the Vercel dashboard: Project → Settings → Environment Variables → add `GEMINI_API_KEY`
+(see `.env.example`), and redeploy.
 
-**Netlify**
-```
-npm i -g netlify-cli
-cd ai-cricket-coach
-netlify deploy --prod
-```
+### 4. Before you launch
+- **Domain:** every URL uses the placeholder `https://aicricketcoach.app`. Run
+  `python3 scripts/set-domain.py https://your-domain.com`, then
+  `python3 scripts/build-sitemap.py https://your-domain.com`.
+- **Add `assets/og-image.png`** (1200x630) — referenced for social previews but not included.
 
-**GitHub Pages**
-1. Push this folder to a GitHub repo.
-2. Repo Settings → Pages → deploy from the `main` branch, root folder.
+## Known limits (not verified against a live deploy)
+- **Timeouts:** `vercel.json` sets `maxDuration: 60`. A slow Gemini response on a long video
+  could exceed this on some Vercel plans — if you see timeouts, either upgrade your plan's
+  function duration limit or shorten `MAX` video length.
+- **First `analyzing` poll does no work on purpose** (it just flips the status) so the
+  progress bar visibly advances before the slower generation call — this roughly doubles the
+  minimum poll count but costs no extra Gemini calls.
+- **JSON reliability:** `api/_lib/shape.js` fills in safe defaults for any field Gemini omits
+  or gets a type wrong, so a slightly imperfect response still renders instead of crashing.
+- I could not run this end-to-end (no network access in the environment that built it) — if
+  something doesn't match the real Gemini or Supabase JS SDK behavior exactly, check the
+  Vercel function logs first; most of the code paths log the underlying error with `console.error`.
 
-Camera recording and Supabase both require **HTTPS** (or `localhost` for
-local testing) — all three options above serve HTTPS by default.
-
-## 3. Test locally (optional)
-
-```
-cd ai-cricket-coach
-python3 -m http.server 8000
-```
-Then open `http://localhost:8000` in Chrome on your computer. For testing
-on an Android phone, use one of the HTTPS deploy options above instead —
-phones can't reach your computer's `localhost`.
-
-## Connecting a real AI analysis backend later
-
-Build any backend that implements the contract documented above
-`const API_BASE` in `index.html`, then set `API_BASE` to its URL. The
-frontend already handles the full upload → processing → results flow,
-including polling a job status endpoint, so no other frontend changes
-should be needed for a basic integration.
+## Status
+Accounts, profiles, video recording/upload, validation and now real AI analysis (Gemini) are
+wired up end-to-end. Update the About/FAQ/Limitations copy once you've verified it end-to-end
+in production — they currently say analysis is "under development."

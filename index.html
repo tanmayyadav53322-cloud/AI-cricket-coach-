@@ -1,6 +1,17 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Cricket Coach</title>
+<title>AI Cricket Coach — AI Cricket Video Analysis & Training Platform</title>
+<meta name="description" content="AI-powered cricket video analysis and training platform for cricket players. Record or upload a batting or bowling video for technique feedback and drills.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://aicricketcoach.app/">
+<meta property="og:type" content="website"><meta property="og:site_name" content="AI Cricket Coach">
+<meta property="og:title" content="AI Cricket Coach — AI Cricket Video Analysis & Training Platform"><meta property="og:description" content="AI-powered cricket video analysis and training platform for cricket players. Record or upload a batting or bowling video for technique feedback and drills.">
+<meta property="og:url" content="https://aicricketcoach.app/"><meta property="og:image" content="https://aicricketcoach.app/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="AI Cricket Coach — AI Cricket Video Analysis & Training Platform"><meta name="twitter:description" content="AI-powered cricket video analysis and training platform for cricket players. Record or upload a batting or bowling video for technique feedback and drills.">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "@id": "https://aicricketcoach.app/#org", "name": "AI Cricket Coach", "url": "https://aicricketcoach.app", "description": "AI-powered cricket video analysis and training platform"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "@id": "https://aicricketcoach.app/#website", "name": "AI Cricket Coach", "url": "https://aicricketcoach.app", "publisher": {"@id": "https://aicricketcoach.app/#org"}, "inLanguage": "en"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "AI Cricket Coach", "url": "https://aicricketcoach.app/", "description": "AI-powered cricket video analysis and training platform for cricket players.", "applicationCategory": "SportsApplication", "operatingSystem": "Web (Chrome on Android)", "featureList": ["Player profiles", "Video recording and upload with quality checks", "General cricket drill library"], "publisher": {"@id": "https://aicricketcoach.app/#org"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is AI Cricket Coach?", "acceptedAnswer": {"@type": "Answer", "text": "AI Cricket Coach is an AI-powered cricket video analysis and training platform for cricket players. Players record or upload a batting or bowling video to get technique observations, drills and a training plan."}}, {"@type": "Question", "name": "How does cricket video analysis work?", "acceptedAnswer": {"@type": "Answer", "text": "You upload or record a video, the app checks its length, size and quality, and a pose-estimation model observes visible movement such as stance, footwork or arm action. Results are grouped into strengths, possible issues with confidence levels, and drills."}}, {"@type": "Question", "name": "Does AI Cricket Coach replace a real cricket coach?", "acceptedAnswer": {"@type": "Answer", "text": "No. It is designed to support practice between coaching sessions and does not replace a qualified coach or a medical professional."}}, {"@type": "Question", "name": "Does it diagnose injuries?", "acceptedAnswer": {"@type": "Answer", "text": "No. It does not diagnose injuries or give medical advice. For pain or a suspected injury, see a qualified coach or a medical professional."}}, {"@type": "Question", "name": "Is AI video analysis available yet?", "acceptedAnswer": {"@type": "Answer", "text": "Not yet. Video recording, upload and quality checks are live. The AI analysis engine is under development, and the app shows that analysis is unavailable instead of inventing feedback."}}]}</script>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f2f5ef;--card:#fff;--ink:#12241a;--mute:#56685c;--line:#d3dcd0;--pitch:#1f4d2e;--onp:#f2f5ef;--seam:#b3261e;--sand:#e6dfc8}
@@ -62,6 +73,8 @@ ul.chk{margin:0 0 16px;padding-left:20px}
 #cdisc{position:absolute;left:12px;right:12px;bottom:calc(120px + env(safe-area-inset-bottom,0px));background:#15271c;padding:12px;border-radius:12px}
 #camscr .btn.ghost{color:#fff;border-color:#fff}#camscr{overscroll-behavior:contain;touch-action:none}#cpm{opacity:.85}#camscr video{max-height:none;margin:0;border-radius:0}
 .gbtn{position:relative;overflow:hidden;cursor:pointer}.gbtn input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0}.gbtn:focus-within{outline:3px solid var(--seam);outline-offset:2px}
+details.qa{border-bottom:1px solid var(--line);padding:10px 0}details.qa summary{cursor:pointer;font-weight:600}details.qa p{margin:.6em 0 0}.lnks{display:flex;flex-wrap:wrap;gap:6px 16px;padding:0;list-style:none}.lnks li{margin:0}
+.marks{display:flex;gap:6px;overflow-x:auto;padding:4px 0 10px}.mk{flex:0 0 auto;background:var(--sand);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:.8rem;color:var(--ink);cursor:pointer}#chatlog{max-height:50vh;overflow-y:auto;margin-bottom:10px}#chatlog .msg{margin:6px 0}
 </style></head><body>
 <nav aria-label="Main"><a href="#" data-go="home"><b>🏠</b>Home</a><a href="#" data-go="dashboard"><b>📊</b>Dashboard</a><a href="#" data-go="analyze"><b>🎥</b>Analyze</a><a href="#" data-go="profile"><b>👤</b>Profile</a></nav>
 <main>
@@ -74,15 +87,45 @@ ul.chk{margin:0 0 16px;padding-left:20px}
   <svg viewBox="0 0 320 110" aria-hidden="true"><rect x="0" y="0" width="320" height="110" rx="8" fill="#000" opacity=".18"/><rect x="20" y="38" width="280" height="34" fill="#e6dfc8" opacity=".9"/><g stroke="#f2f5ef" stroke-width="2"><line x1="60" y1="30" x2="60" y2="80"/><line x1="260" y1="30" x2="260" y2="80"/><line x1="20" y1="55" x2="300" y2="55" stroke-dasharray="2 6" opacity=".5"/></g><g stroke="#f2f5ef" stroke-width="3"><line x1="272" y1="48" x2="272" y2="62"/><line x1="278" y1="48" x2="278" y2="62"/><line x1="284" y1="48" x2="284" y2="62"/></g><path class="ball" d="M40 20 C120 20 170 90 268 58" fill="none" stroke="#e0564c" stroke-width="3" stroke-dasharray="420"/><circle cx="268" cy="58" r="5" fill="#e0564c"/></svg>
  </div>
  <p class="msg">Preview build: profile, dashboard and video upload with quality checks work today. AI Video Analysis — Coming Soon. No feedback is generated until a real pose-estimation model is connected.</p>
+ <h2>What is AI Cricket Coach?</h2>
+ <p>AI Cricket Coach is an AI-powered cricket video analysis and training platform for cricket players. You record or upload a batting or bowling video, and the platform is built to turn it into cricket-specific technique observations, drills and a personalized training plan. <a href="/how-it-works.html">See how it works</a>.</p>
+ <h2>Who is it for?</h2>
+ <p>Beginner, intermediate and advanced players — batters, fast and spin bowlers, wicketkeepers and fielders — who want a structured way to review their own technique between coaching sessions.</p>
  <h2>How it works</h2>
  <ol class="steps"><li><h3>Upload</h3>Upload your batting or bowling video.</li><li><h3>Analyze</h3>AI analyzes visible body movement and cricket technique.</li><li><h3>Understand</h3>Receive strengths, possible issues, and explanations.</li><li><h3>Train</h3>Follow personalized drills and a weekly training plan.</li></ol>
- <h2 id="feat">What you get</h2>
+ <h2>What can be analyzed?</h2>
+ <p>Five analysis types: Batting, Fast Bowling, Spin Bowling, Wicketkeeping and Fielding. Analysis looks at movement a camera can actually show, using pose estimation, and reports how confident each observation is. <a href="/ai-cricket-video-analysis.html">Learn about AI cricket video analysis</a>.</p>
+ <h3>Batting analysis</h3>
+ <p>Stance and balance, head position, footwork, weight transfer, bat path and follow-through. <a href="/batting-analysis.html">Read about batting technique analysis</a>.</p>
+ <h3>Bowling analysis</h3>
+ <p>Run-up rhythm, delivery stride, front-leg position, arm action, release position when visible, and follow-through for fast and spin bowling. <a href="/bowling-analysis.html">Read about bowling action analysis</a>.</p>
+ <h3>Personalized training</h3>
+ <p>Drills and a 7-day plan matched to your role, level, goal and analysis results. Anyone can also browse general <a href="/cricket-drills.html">cricket training drills</a>.</p>
+ <h2 id="feat">What you get today</h2>
  <div class="feat"><div><b>Profile and dashboard</b><br><span class="mute">Your role, level and goal in one place.</span></div><span class="pill live">Available</span></div>
  <div class="feat"><div><b>Video upload with quality checks</b><br><span class="mute">Length, resolution and brightness are checked before analysis.</span></div><span class="pill live">Available</span></div>
  <div class="feat"><div><b>Batting and bowling analysis</b><br><span class="mute">Strengths, possible issues, confidence levels.</span></div><span class="pill">Coming soon</span></div>
  <div class="feat"><div><b>Drills and 7-day plan</b><br><span class="mute">Matched to your role, level and goal.</span></div><span class="pill">Coming soon</span></div>
  <div class="feat"><div><b>AI Coach chat (English, Hindi, Hinglish)</b></div><span class="pill">Coming soon</span></div>
  <div class="feat"><div><b>Progress tracking</b></div><span class="pill">Coming soon</span></div>
+ <h2>Frequently asked questions</h2>
+ <details class="qa"><summary>What is AI Cricket Coach?</summary><p>AI Cricket Coach is an AI-powered cricket video analysis and training platform for cricket players. Players record or upload a batting or bowling video to get technique observations, drills and a training plan.</p></details>
+ <details class="qa"><summary>How does cricket video analysis work?</summary><p>You upload or record a video, the app checks its length, size and quality, and a pose-estimation model observes visible movement such as stance, footwork or arm action. Results are grouped into strengths, possible issues with confidence levels, and drills.</p></details>
+ <details class="qa"><summary>Does AI Cricket Coach replace a real cricket coach?</summary><p>No. It is designed to support practice between coaching sessions and does not replace a qualified coach or a medical professional.</p></details>
+ <details class="qa"><summary>Does it diagnose injuries?</summary><p>No. It does not diagnose injuries or give medical advice. For pain or a suspected injury, see a qualified coach or a medical professional.</p></details>
+ <details class="qa"><summary>Is AI video analysis available yet?</summary><p>Not yet. Video recording, upload and quality checks are live. The AI analysis engine is under development, and the app shows that analysis is unavailable instead of inventing feedback.</p></details>
+ <p><a href="/faq.html">More questions and answers</a></p>
+ <h2>Limitations</h2>
+ <ul>
+  <li>AI video analysis is not available yet; the app says so instead of showing made-up feedback.</li>
+  <li>Analysis uses a single 2D video, so it cannot measure ball speed, spin revolutions or internal joint loading.</li>
+  <li>Observations carry High, Medium or Low confidence, and unclear movements are reported as unable to assess reliably.</li>
+  <li>It does not diagnose injuries, guarantee improvement, or replace a qualified cricket coach or medical professional.</li>
+ </ul>
+ <h2>About AI Cricket Coach</h2>
+ <p>AI Cricket Coach is built to complement human coaching, not replace it. <a href="/about.html">About the platform</a>.</p>
+ <h2>Learn more</h2>
+ <ul class="lnks"><li><a href="/how-it-works.html">How it works</a></li><li><a href="/ai-cricket-video-analysis.html">AI cricket video analysis</a></li><li><a href="/batting-analysis.html">Batting analysis</a></li><li><a href="/bowling-analysis.html">Bowling analysis</a></li><li><a href="/cricket-drills.html">Cricket drills</a></li><li><a href="/cricket-technique.html">Cricket technique</a></li><li><a href="/cricket-glossary.html">Glossary</a></li><li><a href="/faq.html">FAQ</a></li><li><a href="/blog/">Blog</a></li><li><a href="/about.html">About</a></li></ul>
 </section>
 
 <section data-view="auth" hidden>
@@ -113,11 +156,14 @@ ul.chk{margin:0 0 16px;padding-left:20px}
  <p class="mute" style="margin-top:16px">AI feedback is for training guidance and should not replace a qualified cricket coach or medical professional.</p>
  <button class="btn ghost" id="delall">Delete all analysis history</button>
  <button class="btn ghost" id="signout" hidden style="margin-left:8px">Sign out</button>
+ <p class="mute" id="planline" style="margin-top:10px"></p>
+ <a class="btn ghost" href="#" data-go="pricing">Manage plan</a>
 </section>
 
 <section data-view="dashboard" hidden>
- <h2 id="welcome"></h2>
+ <h2 id="welcome"></h2><span class="pill" id="planpill" style="margin-left:6px"></span>
  <p class="mute" id="psum"></p>
+ <div id="upgradebanner" class="msg" hidden></div>
  <div class="grid" style="margin-bottom:12px">
   <div class="card"><div class="stat" id="s_vid">0</div>Videos analyzed</div>
   <div class="card"><div class="stat" id="s_str">0 days</div>Training streak</div>
@@ -126,10 +172,11 @@ ul.chk{margin:0 0 16px;padding-left:20px}
   <a class="card" href="#" data-go="analyze" data-type="Batting"><h3>Batting analysis</h3><span class="mute" id="lb">Upload a batting video.</span></a>
   <a class="card" href="#" data-go="analyze" data-type="Fast Bowling"><h3>Bowling analysis</h3><span class="mute" id="lw">Upload a fast or spin bowling video.</span></a>
   <a class="card" href="#" data-go="training" data-lib="Fitness"><h3>Fitness</h3><span class="mute">Mobility, core and strength drills.</span></a>
-  <a class="card" href="#" data-go="progress"><h3>Progress</h3><span class="mute" id="prg"></span></a>
+  <a class="card" href="#" data-go="progress"><h3>Progress <span class="pill">Premium</span></h3><span class="mute" id="prg"></span></a>
+  <a class="card" href="#" data-go="coach"><h3>AI Coach Chat <span class="pill">Premium</span></h3><span class="mute">Ask about batting, bowling or drills, in English, Hindi or Hinglish.</span></a>
   <div class="card"><h3>Recent feedback</h3><span class="mute" id="rf">No videos analyzed yet.</span></div>
   <div class="card"><h3>Recommended drills</h3><span class="mute" id="rd">None yet.</span></div>
-  <a class="card" href="#" data-go="history"><h3>Analysis history</h3><span class="mute" id="vlist"></span></a>
+  <a class="card" href="#" data-go="history"><h3>Analysis history <span class="pill">Premium</span></h3><span class="mute" id="vlist"></span></a>
  </div>
  <div class="grid" style="margin-top:12px">
   <div class="card"><h3>Latest analysis</h3><span class="mute" id="lat">None yet. Upload a video to get started.</span></div>
@@ -180,6 +227,40 @@ ul.chk{margin:0 0 16px;padding-left:20px}
 <section data-view="training" hidden><h2>Training library</h2><p class="mute">General coaching drills, not taken from your video.</p><div class="chips" id="c_lib" style="margin-bottom:12px"></div><div id="lib"></div></section>
 <section data-view="progress" hidden><h2>Progress</h2><div id="prog2"></div></section>
 <section data-view="history" hidden><h2>My Analysis History</h2><div id="hlist"></div></section>
+
+<section data-view="pricing" hidden>
+ <h2>Free vs Premium</h2>
+ <p id="upsell_reason" class="msg bad" hidden></p>
+ <div class="grid">
+  <div class="card">
+   <h3>Free</h3>
+   <p class="mute" id="plan_free_status"></p>
+   <ul><li>3 video analyses per month</li><li>Basic technique report (summary, top 2 strengths and issues)</li><li>Basic drills</li></ul>
+  </div>
+  <div class="card" style="border-color:var(--pitch)">
+   <h3>Premium</h3>
+   <ul>
+    <li>Unlimited video analysis</li>
+    <li>Advanced AI analysis: biomechanics-style scores, full shot-by-shot breakdown</li>
+    <li>Slow-motion, frame-by-frame review and video annotations/markers</li>
+    <li>Personalized 7-day training plan</li>
+    <li>Progress comparison over time</li>
+    <li>AI Coach Chat (English, Hindi, Hinglish)</li>
+    <li>Full analysis history and detailed reports</li>
+   </ul>
+   <div class="row"><button class="btn" id="go_premium">Try Premium free</button><button class="btn ghost" id="go_free" hidden>Switch back to Free</button></div>
+   <p class="mute">Payments aren't set up yet — this switches your account to Premium at no charge while billing is finished.</p>
+  </div>
+ </div>
+</section>
+
+<section data-view="coach" hidden>
+ <h2>AI Coach Chat</h2>
+ <fieldset><legend>Reply in</legend><div class="chips" id="c_lang" style="margin-bottom:10px"></div></fieldset>
+ <div id="chatlog"></div>
+ <div class="row"><input type="text" id="chatin" placeholder="Ask about your batting, bowling, or drills…" style="flex:1;padding:11px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)"><button class="btn" id="chatsend">Send</button></div>
+ <p class="mute">General cricket coaching chat, not personalized to any specific video. It does not diagnose injuries — see a qualified coach or medical professional for pain or injury concerns.</p>
+</section>
 <div id="camscr" hidden>
  <video id="cv" autoplay playsinline muted></video><canvas id="cvo"></canvas><div id="guide"></div>
  <div id="ctop"><button class="cbtn" id="cclose" aria-label="Close camera">✕</button><span id="crec" hidden>● REC</span><b id="ctimer">0:00 / 1:30</b><span><button class="cbtn" id="cflash" aria-label="Flash" hidden>⚡</button> <button class="cbtn" id="cflip" aria-label="Switch camera">🔄</button></span></div>
@@ -204,7 +285,7 @@ const SUPABASE_ANON_KEY='sb_publishable_KA2yo7FC8YJ5uQwdFE70SQ_WuZ1cthT';
 const BUCKET='cricket-videos';
 const sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
 let session=null;
-function fromRow(d){return {uid:d.user_id,name:d.name||'',age:d.age||'',loc:d.loc||'',level:d.level||'',role:d.role||'',bat:d.bat||'',arm:d.arm||'',btype:d.btype||'',bowl:d.bowl||'',h:d.height||'',w:d.weight||'',y:d.years||'',fs:d.fav_shot||'',days:d.days?String(d.days):'',goal:d.goal||''}}
+function fromRow(d){return {uid:d.user_id,name:d.name||'',age:d.age||'',loc:d.loc||'',level:d.level||'',role:d.role||'',bat:d.bat||'',arm:d.arm||'',btype:d.btype||'',bowl:d.bowl||'',h:d.height||'',w:d.weight||'',y:d.years||'',fs:d.fav_shot||'',days:d.days?String(d.days):'',goal:d.goal||'',plan:d.plan==='premium'?'premium':'free'}}
 async function afterAuth(){
  if(!sb||!session)return;
  try{const {data,error}=await sb.from('profiles').select('*').eq('user_id',session.user.id).maybeSingle();if(!error&&data)S.p=fromRow(data)}catch(e){}
@@ -226,36 +307,50 @@ async function authAction(method){
 $('#asignin').onclick=()=>authAction('signInWithPassword');
 $('#asignup').onclick=()=>authAction('signUp');
 $('#signout').onclick=async()=>{if(sb){try{await sb.auth.signOut()}catch(e){}}session=null;S.p=null;S.v=[];save();go('auth')};
+function renderPricing(){
+ const e=$('#upsell_reason');if(pendingUpsell){e.textContent=pendingUpsell;e.hidden=false}else e.hidden=true;pendingUpsell='';
+ $('#go_premium').hidden=isPremium();$('#go_free').hidden=!isPremium();
+ $('#plan_free_status').textContent=isPremium()?'':'You are currently on the Free plan.'}
+async function setPlan(plan){S.p.plan=plan;save();if(sb&&session){try{await sb.from('profiles').update({plan}).eq('user_id',session.user.id)}catch(e){}}}
+$('#go_premium').onclick=()=>{setPlan('premium');renderPricing();toast('Premium unlocked.')};
+$('#go_free').onclick=()=>{setPlan('free');renderPricing();toast('Switched back to Free.')};
 if(sb){
  sb.auth.getSession().then(({data})=>{session=data.session;if(session)afterAuth()});
  sb.auth.onAuthStateChange((ev,sess)=>{if(ev==='SIGNED_OUT'){session=null;S.p=null;S.v=[];save()}});
 }
 
-const OPT={level:['Beginner','Intermediate','Advanced'],role:['Batsman','Fast Bowler','Spin Bowler','Wicketkeeper','All-rounder'],bat:['Right-handed','Left-handed'],goal:['Improve batting','Improve bowling','Improve fitness','Improve consistency','Improve technique','Prepare for matches'],type:['Batting','Fast Bowling','Spin Bowling','Wicketkeeping','Fielding'],arm:['Right-arm','Left-arm'],btype:['Fast','Medium','Spin'],days:['1','2','3','4','5','6','7'],lib:['Batting','Fast Bowling','Spin Bowling','Wicketkeeping','Fielding','Fitness']};
+const OPT={level:['Beginner','Intermediate','Advanced'],role:['Batsman','Fast Bowler','Spin Bowler','Wicketkeeper','All-rounder'],bat:['Right-handed','Left-handed'],goal:['Improve batting','Improve bowling','Improve fitness','Improve consistency','Improve technique','Prepare for matches'],type:['Batting','Fast Bowling','Spin Bowling','Wicketkeeping','Fielding'],arm:['Right-arm','Left-arm'],btype:['Fast','Medium','Spin'],days:['1','2','3','4','5','6','7'],lib:['Batting','Fast Bowling','Spin Bowling','Wicketkeeping','Fielding','Fitness'],lang:['English','Hindi','Hinglish']};
 for(const k in OPT)$('#c_'+k).innerHTML=OPT[k].map(o=>`<label class="chip"><input type="radio" name="${k}" value="${o}"><span>${o}</span></label>`).join('');
 const val=k=>($(`input[name=${k}]:checked`)||{}).value||'';
 const setVal=(k,v)=>$$(`input[name=${k}]`).forEach(i=>i.checked=i.value===v);
-let type=OPT.type.includes(S.t)?S.t:'Batting';setVal('type',type);
+let type=OPT.type.includes(S.t)?S.t:'Batting';setVal('type',type);setVal('lang','English');
 $('#c_type').onchange=()=>{type=val('type');S.t=type;save();renderMeta()};
 const pickType=t=>{type=t;S.t=t;save();setVal('type',t);renderMeta()};
 function bowlVis(){$('#bowlwrap').hidden=!/Bowler|All-rounder/.test(val('role'))}
 $('#c_role').onchange=bowlVis;
+const isPremium=()=>!!(S.p&&S.p.plan==='premium');
+const AUTH_VIEWS=['dashboard','analyze','profile','history','progress','pricing','coach'];
+const PREMIUM_VIEWS=['history','progress','coach'];
+const UPSELL_REASON={history:'Full analysis history is a Premium feature.',progress:'Progress comparison is a Premium feature.',coach:'AI Coach Chat is a Premium feature.'};
+let pendingUpsell='';
+const upsell=r=>pendingUpsell=r;
 function go(v,push=true){
- if(['dashboard','analyze','profile','history','progress'].includes(v)&&sb&&!session)v='auth';
+ if(AUTH_VIEWS.includes(v)&&sb&&!session)v='auth';
  else if((v==='dashboard'||v==='analyze')&&!S.p)v='profile';
+ else if(PREMIUM_VIEWS.includes(v)&&sb&&session&&S.p&&!isPremium()){upsell(UPSELL_REASON[v]||'');v='pricing'}
  if(v!=='analyze')closeCam();
  $$('[data-view]').forEach(e=>e.hidden=e.dataset.view!==v);
  const nv=(v==='review'||v==='process')?'analyze':v;$$('nav a').forEach(a=>a.classList.toggle('on',a.dataset.go===nv));if(v==='analyze')setVal('type',type);
- if(v==='dashboard')dash();if(v==='review'){renderMeta();$('#chg').textContent=src==='cam'?'Retake':'Choose Another Video'}if(v==='training'){if(!val('lib'))setVal('lib','Batting');showLib(val('lib'))}if(v==='progress')showProg();if(v==='profile')fill();if(v==='history')hist();if(v==='auth'){$('#aerr').hidden=true;$('#amsg').hidden=true}
+ if(v==='dashboard')dash();if(v==='review'){renderMeta();$('#chg').textContent=src==='cam'?'Retake':'Choose Another Video'}if(v==='training'){if(!val('lib'))setVal('lib','Batting');showLib(val('lib'))}if(v==='progress')showProg();if(v==='profile')fill();if(v==='history')hist();if(v==='auth'){$('#aerr').hidden=true;$('#amsg').hidden=true}if(v==='pricing')renderPricing();if(v==='coach')renderChat();
  if(push){try{history.pushState({v:v},'')}catch(e){}}
  window.scrollTo(0,0)}
 addEventListener('popstate',e=>{
  if(!$('#camscr').hidden){if(cs.rec&&cs.rec.state!=='inactive'){try{history.pushState({v:'analyze',cam:1},'')}catch(_){}$('#cdisc').hidden=false}else closeCam();return}
  go((e.state&&e.state.v)||'home',false)});
 document.addEventListener('click',e=>{const t=e.target.closest('[data-go]');if(!t)return;e.preventDefault();go(t.dataset.go);if(t.dataset.type)pickType(t.dataset.type);if(t.dataset.lib){setVal('lib',t.dataset.lib);showLib(t.dataset.lib)}});
-function fill(){const p=S.p||{};$('#p_name').value=p.name||'';$('#p_age').value=p.age||'';$('#p_loc').value=p.loc||'';['arm','btype','days'].forEach(k=>setVal(k,p[k]||''));$('#p_h').value=p.h||'';$('#p_w').value=p.w||'';$('#p_y').value=p.y||'';$('#p_fs').value=p.fs||'';['level','role','bat','goal'].forEach(k=>setVal(k,p[k]||''));bowlVis();$('#signout').hidden=!(sb&&session)}
+function fill(){const p=S.p||{};$('#p_name').value=p.name||'';$('#p_age').value=p.age||'';$('#p_loc').value=p.loc||'';['arm','btype','days'].forEach(k=>setVal(k,p[k]||''));$('#p_h').value=p.h||'';$('#p_w').value=p.w||'';$('#p_y').value=p.y||'';$('#p_fs').value=p.fs||'';['level','role','bat','goal'].forEach(k=>setVal(k,p[k]||''));bowlVis();$('#signout').hidden=!(sb&&session);$('#planline').textContent='Plan: '+(isPremium()?'Premium':'Free')}
 $('#psave').onclick=async()=>{
- const bv=!$('#bowlwrap').hidden;const p={uid:(session&&session.user.id)||(S.p&&S.p.uid)||('local-'+Date.now().toString(36)),name:$('#p_name').value.trim(),age:$('#p_age').value,loc:$('#p_loc').value.trim(),level:val('level'),role:val('role'),bat:val('bat'),arm:bv?val('arm'):'',btype:bv?val('btype'):'',bowl:bv?[val('arm'),val('btype')].filter(Boolean).join(' '):'',h:$('#p_h').value,w:$('#p_w').value,y:$('#p_y').value,fs:$('#p_fs').value.trim(),days:val('days'),goal:val('goal')};
+ const bv=!$('#bowlwrap').hidden;const p={uid:(session&&session.user.id)||(S.p&&S.p.uid)||('local-'+Date.now().toString(36)),name:$('#p_name').value.trim(),age:$('#p_age').value,loc:$('#p_loc').value.trim(),level:val('level'),role:val('role'),bat:val('bat'),arm:bv?val('arm'):'',btype:bv?val('btype'):'',bowl:bv?[val('arm'),val('btype')].filter(Boolean).join(' '):'',h:$('#p_h').value,w:$('#p_w').value,y:$('#p_y').value,fs:$('#p_fs').value.trim(),days:val('days'),goal:val('goal'),plan:(S.p&&S.p.plan)||'free'};
  const miss=[!p.name&&'name',!p.level&&'playing level',!p.role&&'playing role',!p.goal&&'main goal'].filter(Boolean);
  const e=$('#perr');
  if(miss.length){e.textContent='Please add your '+miss.join(', ')+'.';e.hidden=false;return}
@@ -267,18 +362,20 @@ $('#psave').onclick=async()=>{
  }
  go('dashboard')};
 /* ---- Analysis backend (set API_BASE to your server origin to enable) ----
- POST {API_BASE}/api/analyze-video  multipart: video, analysisType, playerProfile (JSON), playerGoal, shotOrDelivery, problem
-   analysisType: batting | fast_bowling | spin_bowling | wicketkeeping | fielding
-   -> 200 {status:"complete",videoId,analysis:{...}} (or the analysis object itself)  or  202 {jobId}
- GET  {API_BASE}/api/analyze-video/{jobId} -> {status:"preparing|analyzing|evaluating|generating|complete|failed",videoId,analysis,code}
- DELETE {API_BASE}/api/videos/{videoId}
- HTTP 501 or code "not_configured" = video received but no computer-vision model is connected.
- analysis: {analysisType,videoQuality:"good|fair|poor|insufficient",overallObservation,strengths[str],
-   possibleIssues[{issue,evidence,whyItMatters,recommendation,confidence:"high|medium|low"}],
-   recommendedDrills[{name,purpose,instructions,duration,difficulty,commonMistakes}],confidence,limitations[str],trainingFocus?[str]}
- For poor or partial views, put "Unable to assess this movement reliably from the uploaded video." or
- "The available camera angle limits this assessment." in limitations. */
-const API_BASE=null;
+ Real backend: a Gemini-powered analysis engine under /api (see the project's /api folder).
+ POST {API_BASE}/analyze-video  JSON: {videoUrl, videoPath, type, analysisType, bowlingStyle, playerGoal, shotOrDelivery, problem}
+   Authorization: Bearer <supabase access token>. analysisType: batting | bowling | fielding | wicketkeeping
+   -> 202 {status:"preparing", jobId}   or   501 {code:"not_configured"} if GEMINI_API_KEY isn't set
+ GET {API_BASE}/analyze-video/{jobId} -> {status:"preparing|analyzing|generating|complete|failed", jobId, analysis, code}
+ DELETE {API_BASE}/videos/{videoId}
+ analysis (once complete) — see api/_lib/shape.js for the exact normalized shape:
+   {analysisStatus, videoAssessment{quality,cameraAngle,...,limitations[]}, overallAssessment{summary,overallScore,confidence},
+    scores{...0-100 or null}, strengths[{title,phase,evidence,whyItHelps,confidence}],
+    issues[{title,severity,confidence,phase,evidence,explanation,likelyEffect,correction,drills[]}],
+    priorityImprovements[{priority,title,reason,action}] (top 3), timeline[{timestamp,phase,observation,confidence}],
+    recommendedDrills[{name,objective,equipment[],duration,sets,repetitions,instructions[],keyFocus,commonMistake,progression}],
+    trainingPlan{duration,days[{day,focus,exercises[],duration,coachingCue}]}, coachSummary, limitations[], safetyNote} */
+const API_BASE='/api';
 const E={sw:'Something went wrong while analyzing your video.',perm:'Camera permission is required to record a video. Please allow camera access in your device settings.',up:'Video upload failed. Please check your internet connection and try again.',poor:"We couldn't reliably analyze this video. Please record from a stable side or rear angle with your full body visible.",ai:'AI analysis service is currently unavailable. Please try again later.',off:'AI video analysis is not connected yet. Please configure the computer-vision service.'};
 const key=d=>d.toLocaleDateString('en-CA');
 const fmt=s=>Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
@@ -295,11 +392,11 @@ function dash(){
  $('#lw').textContent=lw?'Latest: '+(lw.area||'complete')+' · '+when(lw):'Upload a fast or spin bowling video.';
  $('#lat').innerHTML=l?`<a href="#" data-open="${esc(l.id)}">${esc(l.type)} · ${when(l)} · focus: ${esc(l.area||'none listed')}</a>`:'No videos analyzed yet.<br><br><a class="btn" href="#" data-go="analyze">Analyze your first video</a>';
  $('#vlist').textContent=S.v.length+' saved';
- $('#rf').textContent=l?l.result.overallObservation:'No videos analyzed yet.';
- const dd=l?l.result.recommendedDrills.map(d=>typeof d==='string'?d:d.name).filter(Boolean).slice(0,3):[];$('#rd').textContent=dd.length?dd.join(', '):'None yet.';
+ $('#rf').textContent=l?l.result.overallAssessment.summary:'No videos analyzed yet.';
+ const dd=l?l.result.recommendedDrills.map(d=>d.name).filter(Boolean).slice(0,3):[];$('#rd').textContent=dd.length?dd.join(', '):'None yet.';
  $('#prg').textContent=S.v.length>1?'Compare your latest analyses.':'Upload another video to compare your technique.';
  const lp=S.v.slice().reverse().find(v=>v.plan);
- $('#imp').innerHTML=l&&focusOf(l.result).length?'<ol style="margin:0;padding-left:18px">'+ul(focusOf(l.result))+'</ol>':'None yet.';
+ $('#imp').innerHTML=l&&l.result.priorityImprovements.length?'<ol style="margin:0;padding-left:18px">'+ul(l.result.priorityImprovements.map(x=>x.title))+'</ol>':'None yet.';
  $('#lpl').innerHTML=lp?`<a href="#" data-plan="${esc(lp.id)}">${esc(lp.type)} plan · ${Object.keys(lp.plan.done).length}/7 days done</a>`:'None yet. Create one from an analysis.'}
 /* ---- pick / record / validate ---- */
 let objUrl=null,camUsed='',tm,src='',file=null,thumb='',dur=0,busy=false,stream=null,rec=null,chunks=[],cancelled=false,t0=0,cur=null;
@@ -442,102 +539,122 @@ $('#cflash').onclick=async()=>{const t=cs.stream&&cs.stream.getVideoTracks()[0];
 addEventListener('pagehide',closeCam);
 document.addEventListener('visibilitychange',async()=>{if(!document.hidden&&!$('#vact').hidden&&await pstate('camera')==='granted'){$('#vmsg').hidden=true;$('#vact').hidden=true}});
 /* ---- upload -> processing -> results ---- */
-const STG=['Uploading video…','Preparing video…','Analyzing movement…','Evaluating cricket technique…','Generating coaching feedback…'];
+const STG=['Uploading video…','Preparing video…','Analyzing movement…','Generating coaching feedback…','Analysis complete'];
 const snake=t=>t.toLowerCase().replace(/ /g,'_');
-const SI={preparing:1,analyzing:2,detecting:2,evaluating:3,generating:4};
+const SI={preparing:1,analyzing:2,generating:3};
 function stage(i,f){$('#stg').innerHTML=STG.map((s,k)=>`<li class="${k<i?'ok':k===i?'on':''}">${s}${k===0&&i===0&&f?' '+Math.round(f*100)+'%':''}</li>`).join('');$('#pb').style.width=Math.min(100,(i+(f||0))*20)+'%'}
 const NC=up=>'<p><b>Analysis unavailable</b></p><p><b>'+(up?'Video uploaded successfully. ':'')+'AI video analysis is not configured yet.</b></p><p>Connect a computer-vision/pose-analysis service to enable real technique analysis.</p>'+(up?'':'<p class="mute">Your video stayed on this device. Nothing was uploaded.</p>');
 function stop(m,cls,html,noretry){busy=false;const e=$('#pferr');e.className='msg '+(cls==null?'bad':cls);if(html)e.innerHTML=html;else e.textContent=m;e.hidden=false;$('#pact').hidden=false;$('#pretry').hidden=!!noretry}
 function nocfg(up){if(up)return stop('','',NC(true),1);busy=false;const e=$('#rmsg');e.innerHTML=NC(false);e.hidden=false}
-/* service layer: resolves with the backend response, rejects with {code} */
-function analyzeCricketVideo(videoFile,analysisType,onStage){
+function authHeaders(json){const h={};if(json)h['Content-Type']='application/json';if(session&&session.access_token)h.Authorization='Bearer '+session.access_token;return h}
+/* service layer: POST starts the job, then polls until Gemini returns a result.
+   Resolves with {status:'complete', jobId, analysis}, rejects with {code}. */
+function analyzeCricketVideo(payload,onStage){
  return new Promise((resolve,reject)=>{
-  if(!videoFile)return reject({code:'no_video'});
-  if(API_BASE==null)return reject({code:'not_configured'});
-  const poll=async(id,n)=>{try{const r=await fetch(API_BASE+'/api/analyze-video/'+id,{credentials:'include'});if(!r.ok)throw 0;const j=await r.json();
-   if(j.status==='complete'||j.overallObservation!==undefined)return resolve(j);
-   if(j.status==='failed')return reject({code:j.code||'failed'});
-   onStage(SI[j.status]||1,0);if(n>150)return reject({code:'timeout'});setTimeout(()=>poll(id,n+1),2000)}catch(e){reject({code:'failed'})}};
-  const fd=new FormData();fd.append('video',videoFile);fd.append('analysisType',analysisType);fd.append('playerProfile',JSON.stringify(S.p));
-  fd.append('playerGoal',$('#n_goal').value.trim());fd.append('shotOrDelivery',$('#n_shot').value.trim());fd.append('problem',$('#n_prob').value.trim());
-  const x=new XMLHttpRequest();x.open('POST',API_BASE+'/api/analyze-video');x.withCredentials=true;
-  x.upload.onprogress=e=>e.lengthComputable&&onStage(0,e.loaded/e.total);
-  x.upload.onload=()=>onStage(1,0);
-  x.onerror=()=>reject({code:'upload'});
-  x.onload=()=>{let j={};try{j=JSON.parse(x.responseText)}catch(e){}
-   if(x.status===401||x.status===403)return reject({code:'auth'});
-   if(x.status===501||j.code==='not_configured')return reject({code:'not_configured'});
-   if(x.status===422||j.code==='poor_video')return reject({code:'poor_video'});
-   if(x.status>=500)return reject({code:'server'});
-   if(x.status>=400)return reject({code:'upload'});
-   if(j.status==='complete'||j.overallObservation!==undefined)return resolve(j);
-   if(j.jobId||j.job_id){onStage(1,0);return poll(j.jobId||j.job_id,0)}
-   reject({code:'failed'})};
-  x.send(fd)})}
-function done(j,row,path){
- const r=j.analysis||j.result||(j.overallObservation!==undefined?j:null);
- if(!(r&&typeof r.overallObservation==='string'&&['strengths','possibleIssues','recommendedDrills','limitations'].every(k=>Array.isArray(r[k]))))return stop(E.sw);
- if(String(r.videoQuality).toLowerCase()==='insufficient')return stop(E.poor);
- const vid=j.videoId||j.video_id||null,id=row&&row.id?String(row.id):String(vid||Date.now());
- const o={id,videoId:vid,path:path||null,userId:(session&&session.user.id)||S.p.uid||'local',date:new Date().toISOString(),type,analysisType:snake(type),name:file.name,thumb,playerGoal:$('#n_goal').value.trim(),shotOrDelivery:$('#n_shot').value.trim(),result:r,plan:null,area:focusOf(r)[0]||''};
+  if(!payload||!payload.videoUrl)return reject({code:'sw'});
+  if(!session)return reject({code:'auth'});
+  const poll=async(id,n)=>{
+   try{
+    const r=await fetch(API_BASE+'/analyze-video/'+id,{headers:authHeaders()});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok)return reject({code:j.code||'server',message:j.message});
+    if(j.status==='complete')return resolve(j);
+    if(j.status==='failed')return reject({code:j.code||'ai_error',message:j.message});
+    onStage(SI[j.status]??1,0);
+    if(n>80)return reject({code:'timeout'});
+    setTimeout(()=>poll(id,n+1),3000)
+   }catch(e){reject({code:'server'})}};
+  onStage(0,0);
+  fetch(API_BASE+'/analyze-video',{method:'POST',headers:authHeaders(true),body:JSON.stringify(payload)})
+   .then(async r=>{const j=await r.json().catch(()=>({}));
+    if(r.status===401||r.status===403)return reject({code:'auth'});
+    if(r.status===501||j.code==='not_configured')return reject({code:'not_configured'});
+    if(r.status===422||j.code==='poor_video')return reject({code:'poor_video'});
+    if(r.status===402)return reject({code:j.code||'limit_reached',message:j.message});
+    if(!r.ok)return reject({code:j.code||'server',message:j.message});
+    onStage(1,0);poll(j.jobId,0)})
+   .catch(()=>reject({code:'upload'}))})}
+function done(j,path){
+ const r=j.analysis;
+ if(!(r&&Array.isArray(r.strengths)&&Array.isArray(r.issues)&&Array.isArray(r.recommendedDrills)))return stop(E.sw);
+ const id=String(j.jobId||j.videoId||Date.now());
+ const o={id,videoId:id,path:path||null,userId:(session&&session.user.id)||S.p.uid||'local',date:new Date().toISOString(),type,analysisType:j.analysisType||snake(type),name:file.name,thumb,playerGoal:$('#n_goal').value.trim(),shotOrDelivery:$('#n_shot').value.trim(),result:r,plan:null,area:(r.priorityImprovements[0]&&r.priorityImprovements[0].title)||''};
  BLOB[id]=$('#pv').src;objUrl=null;S.v.push(o);save();busy=false;
- $('#ph').textContent='Analysis Complete';stage(5,0);
+ $('#ph').textContent='Analysis Complete';stage(4,0);
  $('#n_goal').value=$('#n_shot').value=$('#n_prob').value='';reset();
  setTimeout(()=>openRes(id),900)}
 async function uploadVideo(f){
  const path=session.user.id+'/'+Date.now()+'-'+f.name.replace(/[^a-zA-Z0-9_.-]/g,'_');
  const {error}=await sb.storage.from(BUCKET).upload(path,f,{contentType:f.type||'video/mp4'});
  if(error)throw error;return path}
-async function persistAnalysis(path,result){
- if(!sb||!session)return null;
- const row={user_id:session.user.id,type,analysis_type:snake(type),video_path:path,player_goal:$('#n_goal').value.trim()||null,shot_or_delivery:$('#n_shot').value.trim()||null,result:result,area:result?(focusOf(result)[0]||null):null};
- try{const {data,error}=await sb.from('analyses').insert(row).select().single();return error?null:data}catch(e){return null}}
 async function start(){
  if(busy||!file)return;
+ if(!sb||!session)return stop('Please sign in again to analyze videos.');
+ if(!isPremium()){
+  const n=new Date();const used=S.v.filter(v=>{const d=new Date(v.date);return d.getFullYear()===n.getFullYear()&&d.getMonth()===n.getMonth()}).length;
+  if(used>=3){upsell("You've used all 3 free analyses this month. Upgrade to Premium for unlimited analysis.");reset();return go('pricing')}}
  $('#rmsg').hidden=true;
  busy=true;$('#pferr').hidden=true;$('#pact').hidden=true;$('#ph').textContent='Analyzing your video…';stage(0,0);go('process');
- let path=null,cloud=false;
- if(sb&&session){
-  try{path=await uploadVideo(file);cloud=true}
-  catch(e){busy=false;return stop(E.up)}}
- if(API_BASE==null){
-  if(cloud)persistAnalysis(path,null);
-  return nocfg(cloud)}
+ let path=null,videoUrl=null;
  try{
-  const j=await analyzeCricketVideo(file,snake(type),stage);
-  const r=j.analysis||j.result||(j.overallObservation!==undefined?j:null);
-  const row=cloud?await persistAnalysis(path,r):null;
-  done(j,row,path)}
- catch(e){const c=e&&e.code;
-  if(c==='not_configured'){if(cloud)persistAnalysis(path,null);return nocfg(cloud)}
-  stop(c==='poor_video'?E.poor:c==='auth'?'Please sign in again to analyze videos.':c==='upload'?E.up:(c==='server'||c==='timeout')?E.ai:E.sw)}}
+  path=await uploadVideo(file);
+  const {data:signed,error:se}=await sb.storage.from(BUCKET).createSignedUrl(path,600);
+  if(se||!signed)throw se||new Error('sign failed');
+  videoUrl=signed.signedUrl;
+ }catch(e){busy=false;return stop(E.up)}
+ const bowlingStyle=type==='Fast Bowling'?'fast':type==='Spin Bowling'?'spin':null;
+ const geminiType=/Bowling/.test(type)?'bowling':snake(type);
+ const payload={videoUrl,videoPath:path,type,analysisType:geminiType,bowlingStyle,playerGoal:$('#n_goal').value.trim(),shotOrDelivery:$('#n_shot').value.trim(),problem:$('#n_prob').value.trim()};
+ try{
+  const j=await analyzeCricketVideo(payload,stage);
+  done(j,path)
+ }catch(e){const c=e&&e.code;
+  if(c==='not_configured')return nocfg(true);
+  if(c==='limit_reached'){upsell(e.message||"You've used your free analyses for this month. Upgrade to Premium for unlimited analysis.");return go('pricing')}
+  stop(e.message||(c==='poor_video'?E.poor:c==='auth'?'Please sign in again to analyze videos.':c==='upload'?E.up:(c==='server'||c==='timeout')?E.ai:E.sw))}}
 $('#go').onclick=start;
 $('#pretry').onclick=()=>{if(file)start();else go('analyze')};
 $('#pback').onclick=()=>{reset();go('analyze')};
 /* ---- results, plan, history ---- */
 const ul=a=>a.map(x=>`<li>${esc(x)}</li>`).join('');
 const cap=s=>s?String(s)[0].toUpperCase()+String(s).slice(1):'';
-const RANK={high:0,medium:1,low:2};
-const focusOf=r=>Array.isArray(r.trainingFocus)&&r.trainingFocus.length?r.trainingFocus:r.possibleIssues.slice().sort((a,b)=>(RANK[String(a.confidence).toLowerCase()]??3)-(RANK[String(b.confidence).toLowerCase()]??3)).map(i=>i.issue).slice(0,3);
-const pk=(o,...k)=>{for(const x of k)if(o[x]!=null&&o[x]!=='')return o[x];return ''};
+function parseTime(s){if(s==null)return null;s=String(s).trim();let m=/^(\d+):(\d{1,2})$/.exec(s);if(m)return(+m[1])*60+ +m[2];m=/^([\d.]+)\s*s?$/.exec(s);if(m)return +m[1];return null}
 function renderResult(r){
- const dr=r.recommendedDrills.map(d=>typeof d==='string'?{name:d}:d),F=focusOf(r),q=String(r.videoQuality||'').toLowerCase(),u=cur&&BLOB[cur.id];
- return `${u?`<video id="rv" src="${u}" controls playsinline></video><div class="row" style="margin-bottom:10px"><button class="btn ghost" data-rate="0.25">0.25×</button><button class="btn ghost" data-rate="0.5">0.5×</button><button class="btn ghost" data-rate="1">1×</button></div>`:''}
- ${q==='poor'?'<div class="msg bad">Unable to assess this movement reliably from the uploaded video.</div>':''}
- <div class="msg"><span class="pill live">From your video</span> ${r.videoQuality?`<span class="pill">Video quality: ${esc(cap(r.videoQuality))}</span>`:''} ${r.confidence?`<span class="pill">Confidence: ${esc(cap(r.confidence))}</span>`:''}<p style="margin:8px 0 0"><b>Overall observation.</b> ${esc(r.overallObservation)}</p></div>
- <h3>✅ Strengths</h3><ul>${ul(r.strengths)||'<li class="mute">Nothing could be assessed reliably.</li>'}</ul>
- <h3>⚠️ Areas to improve</h3>${r.possibleIssues.map(i=>`<div class="card" style="margin-bottom:10px"><b>${esc(i.issue)}</b> <span class="pill">Confidence: ${esc(cap(i.confidence))}</span>${String(i.confidence).toLowerCase()==='low'?'<p class="mute">The camera angle or video quality makes this observation uncertain.</p>':''}<p><b>What was observed:</b> ${esc(pk(i,'evidence','observed'))}</p><p><b>Why it matters:</b> ${esc(pk(i,'whyItMatters','why_it_matters'))}</p><p><span class="pill">Coaching advice</span> <b>How to improve:</b> ${esc(pk(i,'recommendation','correction'))}</p>${i.drill?`<p><b>Drill recommendation:</b> ${esc(i.drill)}</p>`:''}</div>`).join('')||'<p class="mute">No issues with enough visible evidence.</p>'}
- <h3>🎯 Priority focus</h3><ol>${ul(F)||'<li class="mute">None identified.</li>'}</ol>
- ${Array.isArray(r.timeline)&&r.timeline.length?`<h3>Video timeline</h3><ul>${r.timeline.map(t=>`<li>${typeof t.time==='number'?`<a href="#" data-seek="${t.time}">${fmt(t.time)}</a>`:esc(t.time)} — ${esc(t.label)}</li>`).join('')}</ul>`:''}
- <h3>Recommended drills</h3><span class="pill">Coaching advice</span>${dr.map(d=>`<div class="card" style="margin:8px 0"><b>${esc(d.name||'Drill')}</b> ${d.difficulty?`<span class="pill">${esc(d.difficulty)}</span>`:''}<p><b>Purpose:</b> ${esc(pk(d,'purpose','objective'))}</p><p><b>Instructions:</b> ${esc(d.instructions||'')}</p><p><b>Duration:</b> ${esc(d.duration||'')}</p><p><b>Common mistakes:</b> ${esc(pk(d,'commonMistakes','common_mistakes'))}</p></div>`).join('')||'<p class="mute">No drills returned.</p>'}
- <h3>Video limitations</h3><ul>${ul(r.limitations)||'<li class="mute">None reported.</li>'}</ul>
+ const prem=isPremium(),q=String(r.videoAssessment.quality||'').toLowerCase(),lim=String(r.analysisStatus)==='limited',
+ u=cur&&BLOB[cur.id],
+ sc=Object.entries(r.scores).filter(([,v])=>v!=null),
+ SCN={setup:'Setup',balance:'Balance',footwork:'Footwork',headStability:'Head stability',movementEfficiency:'Movement efficiency',timing:'Timing',bodyControl:'Body control',consistency:'Consistency',technique:'Technique'},
+ strengths=prem?r.strengths:r.strengths.slice(0,2),
+ issues=prem?r.issues:r.issues.slice(0,2),
+ drills=prem?r.recommendedDrills:r.recommendedDrills.slice(0,2);
+ const video=u?`<video id="rv" src="${u}" controls playsinline></video>`+(prem?
+  `<div class="row" style="margin-bottom:6px"><button class="btn ghost" data-rate="0.25">0.25×</button><button class="btn ghost" data-rate="0.5">0.5×</button><button class="btn ghost" data-rate="1">1×</button><button class="btn ghost" data-frame="-1">◀ Frame</button><button class="btn ghost" data-frame="1">Frame ▶</button></div>`+
+  (r.timeline.length?`<div class="marks">${r.timeline.map((t,i)=>`<button class="mk" type="button" data-mark="${i}" title="${esc(t.observation)}">${esc(t.timestamp||('Moment '+(i+1)))}</button>`).join('')}</div>`:'')
+  :`<p class="mute">Slow motion, frame-by-frame review and video annotations are a <a href="#" data-go="pricing">Premium</a> feature.</p>`):'';
+ return `${video}
+ ${lim?'<div class="msg bad">This assessment is limited — see Video limitations below before relying on it.</div>':''}
+ <div class="msg"><span class="pill live">Video quality: ${esc(cap(q||'unknown'))}</span> <span class="pill">Camera angle: ${esc(cap(r.videoAssessment.cameraAngle||'unknown'))}</span>${r.overallAssessment.confidence?` <span class="pill">Confidence: ${esc(cap(r.overallAssessment.confidence))}</span>`:''}
+ <p style="margin:8px 0 0"><b>Overall assessment.</b> ${esc(r.overallAssessment.summary)}</p>
+ ${prem&&r.overallAssessment.overallScore!=null?`<p style="margin:6px 0 0"><b>Overall score:</b> ${r.overallAssessment.overallScore}/100 <span class="mute">(an approximate analytical indicator, not an official measurement)</span></p>`:''}</div>
+ ${prem&&sc.length?`<h3>Scores</h3><ul>${sc.map(([k,v])=>`<li><b>${SCN[k]||k}:</b> ${v}/100</li>`).join('')}</ul>`:''}
+ <h3>✅ What you're doing well</h3>${strengths.length?strengths.map(s=>`<div class="card" style="margin-bottom:10px"><b>${esc(s.title)}</b>${s.phase?` <span class="pill">${esc(cap(s.phase))}</span>`:''}${s.confidence?` <span class="pill">Confidence: ${esc(cap(s.confidence))}</span>`:''}<p><b>Evidence:</b> ${esc(s.evidence)}</p><p><b>Why it helps:</b> ${esc(s.whyItHelps)}</p></div>`).join(''):'<p class="mute">Nothing could be assessed reliably as a strength.</p>'}
+ <h3>⚠️ Possible technique issues</h3>${issues.length?issues.map(i=>`<div class="card" style="margin-bottom:10px"><b>${esc(i.title)}</b> <span class="pill">Severity: ${esc(cap(i.severity))}</span> <span class="pill">Confidence: ${esc(cap(i.confidence))}</span>${i.phase?` <span class="pill">${esc(cap(i.phase))}</span>`:''}${String(i.confidence).toLowerCase()==='low'?'<p class="mute">There is a possible indication, but the video does not provide enough evidence for a reliable conclusion.</p>':''}<p><b>What was observed:</b> ${esc(i.evidence)}</p><p><b>Why it matters:</b> ${esc(i.explanation)}${i.likelyEffect?' '+esc(i.likelyEffect):''}</p><p><span class="pill">Coaching advice</span> <b>How to improve:</b> ${esc(i.correction)}</p>${i.drills.length?`<p><b>Drill:</b> ${esc(i.drills.join(', '))}</p>`:''}</div>`).join(''):'<p class="mute">No issues with enough visible evidence.</p>'}
+ ${prem?`<h3>🎯 Top priority improvements</h3>${r.priorityImprovements.length?`<ol>${r.priorityImprovements.map(p=>`<li><b>${esc(p.title)}</b> — ${esc(p.reason)} <span class="mute">Try:</span> ${esc(p.action)}</li>`).join('')}</ol>`:'<p class="mute">None identified.</p>'}`:''}
+ ${prem&&r.timeline.length?`<h3>Video timeline</h3><ul>${r.timeline.map(t=>`<li>${t.timestamp?esc(t.timestamp)+' — ':''}<b>${esc(cap(t.phase))}:</b> ${esc(t.observation)}</li>`).join('')}</ul>`:''}
+ <h3>Recommended drills</h3><span class="pill">Coaching advice</span>${drills.length?drills.map(d=>`<div class="card" style="margin:8px 0"><b>${esc(d.name)}</b><p><b>Objective:</b> ${esc(d.objective)}</p>${d.equipment.length?`<p><b>Equipment:</b> ${esc(d.equipment.join(', '))}</p>`:''}<p><b>Duration:</b> ${esc(d.duration)}${d.sets?' · Sets: '+esc(d.sets):''}${d.repetitions?' · Reps: '+esc(d.repetitions):''}</p>${d.instructions.length?`<p><b>Instructions:</b> ${esc(d.instructions.join(' '))}</p>`:''}${d.keyFocus?`<p><b>Key focus:</b> ${esc(d.keyFocus)}</p>`:''}${d.commonMistake?`<p><b>Common mistake:</b> ${esc(d.commonMistake)}</p>`:''}</div>`).join(''):'<p class="mute">No drills returned.</p>'}
+ ${prem&&r.coachSummary?`<h3>Coach's summary</h3><p>${esc(r.coachSummary)}</p>`:''}
+ <h3>Video limitations</h3><ul>${ul(r.videoAssessment.limitations.concat(r.limitations))||'<li class="mute">None reported.</li>'}</ul>
+ ${r.safetyNote?`<div class="msg bad">${esc(r.safetyNote)}</div>`:''}
+ ${!prem?`<div class="msg" style="margin-top:14px"><b>Want the full picture?</b> Premium unlocks biomechanics-style scores, your top priority improvements, video timeline with clickable markers, frame-by-frame review, and your complete drill list. <a href="#" data-go="pricing">See Premium</a></div>`:''}
  <p class="mute">AI feedback is for training guidance and should not replace a qualified cricket coach or medical professional.</p>`}
 function openRes(id){cur=S.v.find(v=>String(v.id)===String(id));if(!cur)return;$('#rbody').innerHTML=renderResult(cur.result);$('#mkplan').textContent=cur.plan?'View My 7-Day Training Plan':'Create My 7-Day Training Plan';go('results')}
 function makePlan(o){
- const p=S.p,r=o.result,D=r.recommendedDrills.map(d=>typeof d==='string'?{name:d}:d),F=focusOf(r),L=p.level;
+ const r=o.result,src=r.trainingPlan&&r.trainingPlan.days.length?r.trainingPlan.days:null;
+ if(src)return src.map(d=>({title:d.focus||('Day '+d.day),objective:d.focus||'',drill:(d.exercises||[]).join(', ')||'General practice',sets:'',reps:d.duration||'',rest:'',ins:(d.exercises||[]).join(' '),diff:'',safe:d.coachingCue||'Warm up first. Stop if you feel pain and see a qualified coach or medical professional.'}));
+ const p=S.p,D=r.recommendedDrills,F=r.priorityImprovements.map(x=>x.title),L=p.level;
  const mins={Beginner:20,Intermediate:30,Advanced:40}[L]||30,sets=L==='Beginner'?2:L==='Advanced'?4:3,diff=L==='Advanced'?'Hard':L==='Beginner'?'Easy':'Medium';
  const fo=i=>F.length?F[i%F.length]:'core technique',sd=o.shotOrDelivery||o.type.toLowerCase()+' technique',rest='60-90 seconds between sets',safe='Warm up first. Stop if you feel pain and see a qualified coach or medical professional.';
- const ex=(title,obj,i,x)=>{const d=D.length?D[i%D.length]:null;return Object.assign({title,objective:obj,drill:d&&d.name||'Slow shadow practice',sets:String(sets),reps:d&&d.duration||'6 reps',rest,ins:d&&d.instructions||'Practise '+sd+' slowly, ideally with someone watching.',diff:d&&d.difficulty||diff,safe},x||{})};
+ const ex=(title,obj,i,x)=>{const d=D.length?D[i%D.length]:null;return Object.assign({title,objective:obj,drill:d&&d.name||'Slow shadow practice',sets:String(sets),reps:d&&d.duration||'6 reps',rest,ins:d&&d.instructions.join(' ')||'Practise '+sd+' slowly, ideally with someone watching.',diff:d&&d.keyFocus||diff,safe},x||{})};
  const days=[
  ex('Technique correction','Improve '+fo(0)+(o.playerGoal?' (your goal: '+o.playerGoal+')':''),0),
  ex('Footwork drills','Build footwork for your '+sd+', focusing on '+fo(1),1),
@@ -549,15 +666,13 @@ function makePlan(o){
  const keep=[0,2,1,4,5,6,3].slice(0,Math.min(7,parseInt(p.days)||7));
  return days.map((d,i)=>keep.includes(i)?d:{title:'Rest day',objective:'Recover between training days',drill:'Rest or an easy walk',sets:'-',reps:'-',rest:'-',ins:'Light movement only.',diff:'Easy',safe})}
 function showPlan(){
- $('#pbody').innerHTML=cur.plan.days.map((d,i)=>`<label class="card day"><input type="checkbox" data-day="${i}" ${cur.plan.done[i]?'checked':''}><span><b>Day ${i+1}: ${esc(d.title)}</b><br><b>Objective:</b> ${esc(d.objective)}<br><b>Exercise:</b> ${esc(d.drill)}<br><b>Sets:</b> ${esc(d.sets)} · <b>Reps or duration:</b> ${esc(d.reps)}<br><b>Rest:</b> ${esc(d.rest)}<br><b>Coaching instruction:</b> ${esc(d.ins)}<br><b>Difficulty:</b> ${esc(d.diff)}<br><b>Safety note:</b> ${esc(d.safe)}</span></label>`).join('');go('plan')}
-$('#mkplan').onclick=()=>{if(!cur)return;if(!cur.plan){cur.plan={days:makePlan(cur),done:{}};save()}showPlan()};
+ $('#pbody').innerHTML=cur.plan.days.map((d,i)=>`<label class="card day"><input type="checkbox" data-day="${i}" ${cur.plan.done[i]?'checked':''}><span><b>Day ${i+1}: ${esc(d.title)}</b>${d.objective?'<br><b>Objective:</b> '+esc(d.objective):''}<br><b>Exercise:</b> ${esc(d.drill)}${d.sets?'<br><b>Sets:</b> '+esc(d.sets):''}${d.reps?' · <b>Reps or duration:</b> '+esc(d.reps):''}${d.rest?'<br><b>Rest:</b> '+esc(d.rest):''}<br><b>Coaching instruction:</b> ${esc(d.ins)}${d.diff?'<br><b>Key focus:</b> '+esc(d.diff):''}<br><b>Safety note:</b> ${esc(d.safe)}</span></label>`).join('');go('plan')}
+$('#mkplan').onclick=()=>{if(!cur)return;if(!isPremium()){upsell('Personalized 7-day training plans are a Premium feature.');return go('pricing')}if(!cur.plan){cur.plan={days:makePlan(cur),done:{}};save()}showPlan()};
 $('#pbody').onchange=e=>{const i=e.target.dataset.day;if(i==null)return;if(e.target.checked)cur.plan.done[i]=key(new Date());else delete cur.plan.done[i];save()};
 async function delRec(id,btn){
  if(!btn.dataset.arm){btn.dataset.arm=1;btn.dataset.t=btn.textContent;btn.textContent='Tap again to delete';setTimeout(()=>{btn.dataset.arm='';btn.textContent=btn.dataset.t},4000);return}
  const v=S.v.find(x=>String(x.id)===String(id));if(!v)return;
- if(API_BASE!=null&&v.videoId){let ok=false;try{ok=(await fetch(API_BASE+'/api/videos/'+v.videoId,{method:'DELETE',credentials:'include'})).ok}catch(e){}
-  if(!ok)return toast("Couldn't delete the stored video on the server. Nothing was removed. Please try again.")}
- if(sb&&session&&(v.path||typeof v.id==='string')){
+ if(sb&&session){
   try{if(v.path)await sb.storage.from(BUCKET).remove([v.path]);await sb.from('analyses').delete().eq('id',v.id).eq('user_id',session.user.id)}
   catch(e){return toast("Couldn't delete from your account. Please try again.")}}
  if(BLOB[v.id]){URL.revokeObjectURL(BLOB[v.id]);delete BLOB[v.id]}S.v=S.v.filter(x=>x!==v);save();toast('Analysis deleted.');if(cur===v)cur=null;go('history')}
@@ -568,7 +683,10 @@ document.addEventListener('click',e=>{
  const pl=e.target.closest('[data-plan]');if(pl){e.preventDefault();cur=S.v.find(v=>String(v.id)===pl.dataset.plan);if(cur&&cur.plan)showPlan()}
  if(d)delRec(d.dataset.del,d);
  if(c&&cur)delRec(cur.id,c);
- const rt=e.target.closest('[data-rate]'),sk=e.target.closest('[data-seek]'),rv=$('#rv');if(rt&&rv)rv.playbackRate=+rt.dataset.rate;if(sk&&rv){e.preventDefault();rv.currentTime=+sk.dataset.seek;rv.play()}});
+ const rt=e.target.closest('[data-rate]'),fr=e.target.closest('[data-frame]'),mk=e.target.closest('[data-mark]'),rv=$('#rv');
+ if(rt&&rv)rv.playbackRate=+rt.dataset.rate;
+ if(fr&&rv){e.preventDefault();rv.pause();rv.currentTime=Math.max(0,Math.min(rv.duration||1e9,rv.currentTime+(+fr.dataset.frame)/30))}
+ if(mk&&rv&&cur){e.preventDefault();const t=parseTime((cur.result.timeline[+mk.dataset.mark]||{}).timestamp);if(t!=null){rv.currentTime=t;rv.play()}}});
 const BLOB={};
 const LIB={
 'Batting':[['Front-foot drive','3 sets of 8 reps','Step to the pitch of the ball, head over the front knee, and drive along the line.','Medium'],['Back-foot movement','3 sets of 8 reps','Move back and across, stay balanced, and play the ball late.','Medium'],['Defensive technique','3 sets of 10 reps','Soft hands, bat close to the pad, head still.','Easy'],['Cover drive','3 sets of 8 reps','Front foot to the pitch, high elbow, full follow-through.','Medium'],['Straight drive','3 sets of 8 reps','Stay side-on, swing straight, and finish balanced.','Medium'],['Pull shot','3 sets of 6 reps','Get inside the line, rotate the hips, and keep the head steady.','Hard'],['Cut shot','3 sets of 6 reps','Wait for width, move back, and play with high hands.','Medium'],['Head-position drill','3 sets of 10 reps','Play drop-fed balls and hold your finish with the head over the front knee.','Easy']],
@@ -582,18 +700,34 @@ $('#c_lib').onchange=()=>showLib(val('lib'));
 function showProg(){
  const l=S.v[S.v.length-1],pv=l&&S.v.slice(0,-1).reverse().find(v=>v.type===l.type),e=$('#prog2');
  if(!l||!pv){e.innerHTML='<p class="mute">Upload another video to compare your technique.</p>';return}
- const nm=v=>v.result.possibleIssues.map(i=>String(i.issue)),k=s=>s.toLowerCase().trim(),A=nm(pv),B=nm(l),ka=new Set(A.map(k)),kb=new Set(B.map(k));
+ const nm=v=>v.result.issues.map(i=>String(i.title)),k=s=>s.toLowerCase().trim(),A=nm(pv),B=nm(l),ka=new Set(A.map(k)),kb=new Set(B.map(k));
  const sec=(t,a)=>`<h3>${t}</h3><ul>${ul(a)||'<li class="mute">None</li>'}</ul>`;
  e.innerHTML=`<p class="mute">${esc(l.type)}: ${when(pv)} compared with ${when(l)}. This compares reported observations only and is not a score.</p>`+sec('Repeated issues',B.filter(x=>ka.has(k(x))))+sec('New observations',B.filter(x=>!ka.has(k(x))))+sec('Not reported in the latest video',A.filter(x=>!kb.has(k(x))))}
 $('#rem').onclick=()=>{if(!busy){reset();go('analyze')}};
 $('#delall').onclick=async e=>{const b=e.currentTarget,t='Delete all analysis history';
  if(!b.dataset.arm){b.dataset.arm=1;b.textContent='Tap again to delete everything';setTimeout(()=>{b.dataset.arm='';b.textContent=t},4000);return}
- if(API_BASE!=null)for(const v of S.v)if(v.videoId){let ok=false;try{ok=(await fetch(API_BASE+'/api/videos/'+v.videoId,{method:'DELETE',credentials:'include'})).ok}catch(x){}if(!ok)return toast("Some stored videos couldn't be deleted on the server. Please try again.")}
  if(sb&&session){
   try{const paths=S.v.map(v=>v.path).filter(Boolean);if(paths.length)await sb.storage.from(BUCKET).remove(paths);await sb.from('analyses').delete().eq('user_id',session.user.id)}
   catch(e){return toast("Couldn't delete everything from your account. Please try again.")}}
  S.v=[];save();b.dataset.arm='';b.textContent=t;toast('All analyses deleted.')};
+/* ---- AI Coach Chat ---- */
+let chatHistory=[],chatBusy=false;
+function renderChat(){
+ $('#chatlog').innerHTML=chatHistory.length?chatHistory.map(m=>`<div class="msg ${m.role==='user'?'':'ok'}"><b>${m.role==='user'?'You':'Coach'}:</b> ${esc(m.text)}</div>`).join(''):'<p class="mute">Ask anything about batting, bowling, fielding or training.</p>';
+ $('#chatlog').scrollTop=$('#chatlog').scrollHeight}
+async function sendChat(){
+ const inp=$('#chatin'),msg=inp.value.trim();
+ if(!msg||chatBusy)return;
+ chatBusy=true;$('#chatsend').disabled=true;chatHistory.push({role:'user',text:msg});renderChat();inp.value='';
+ try{
+  const r=await fetch(API_BASE+'/coach-chat',{method:'POST',headers:authHeaders(true),body:JSON.stringify({message:msg,language:val('lang').toLowerCase(),playerProfile:S.p,history:chatHistory.slice(0,-1).slice(-6)})});
+  const j=await r.json().catch(()=>({}));
+  chatHistory.push({role:'assistant',text:r.ok&&j.reply?j.reply:(j.message||'AI Coach Chat is currently unavailable. Please try again later.')})
+ }catch(e){chatHistory.push({role:'assistant',text:'AI Coach Chat is currently unavailable. Please try again later.'})}
+ chatBusy=false;$('#chatsend').disabled=false;renderChat()}
+$('#chatsend').onclick=sendChat;
+$('#chatin').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendChat()}});
 history.replaceState&&(()=>{try{history.replaceState({v:'home'},'')}catch(e){}})();
 (()=>{let f=false;try{f=window.top!==window}catch(e){f=true}if(f||/; wv\)/.test(navigator.userAgent))$('#gfix').hidden=false;$('#gchr').onclick=openChrome})();
-go('home',false);
+{const q=new URLSearchParams(location.search).get('go');go(['analyze','training'].includes(q)?q:'home',false)}
 </script></body></html>

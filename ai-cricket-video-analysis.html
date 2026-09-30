@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Cricket Video Analysis, Explained | AI Cricket Coach</title>
+<meta name="description" content="What AI cricket video analysis is, how pose estimation works, what it can and can't measure from one video, and why confidence levels matter.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://aicricketcoach.app/ai-cricket-video-analysis.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AI Cricket Coach">
+<meta property="og:title" content="AI Cricket Video Analysis, Explained | AI Cricket Coach">
+<meta property="og:description" content="What AI cricket video analysis is, how pose estimation works, what it can and can't measure from one video, and why confidence levels matter.">
+<meta property="og:url" content="https://aicricketcoach.app/ai-cricket-video-analysis.html">
+<meta property="og:image" content="https://aicricketcoach.app/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI Cricket Video Analysis, Explained | AI Cricket Coach">
+<meta name="twitter:description" content="What AI cricket video analysis is, how pose estimation works, what it can and can't measure from one video, and why confidence levels matter.">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://aicricketcoach.app/#org",
+  "name": "AI Cricket Coach",
+  "url": "https://aicricketcoach.app",
+  "description": "AI-powered cricket video analysis and training platform"
+}</script>
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://aicricketcoach.app/#website",
+  "name": "AI Cricket Coach",
+  "url": "https://aicricketcoach.app",
+  "description": "AI-powered cricket video analysis and training platform",
+  "publisher": {
+    "@id": "https://aicricketcoach.app/#org"
+  },
+  "inLanguage": "en"
+}</script>
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://aicricketcoach.app/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "AI Cricket Video Analysis, Explained",
+      "item": "https://aicricketcoach.app/ai-cricket-video-analysis.html"
+    }
+  ]
+}</script>
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "AI Cricket Video Analysis, Explained",
+  "description": "What AI cricket video analysis is and how it works.",
+  "mainEntityOfPage": "https://aicricketcoach.app/ai-cricket-video-analysis.html",
+  "publisher": {
+    "@id": "https://aicricketcoach.app/#org"
+  },
+  "datePublished": "2026-09-28",
+  "dateModified": "2026-09-28"
+}</script>
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is AI cricket video analysis?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "AI cricket video analysis is the use of computer vision \u2014 specifically pose estimation \u2014 to observe a player's body position and movement in a video, and relate what's visible to established cricket coaching concepts like stance, footwork, head position, or bowling arm action."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does batting video analysis measure?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It looks at what a camera can actually show: stance and balance, head position, front-foot and back-foot movement, weight transfer, bat path, contact position when visible, and follow-through. It does not measure things a single video can't capture, such as bat speed at the point of contact or internal joint loading."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can AI replace a real cricket coach?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. AI Cricket Coach is designed to support practice between coaching sessions and give players a structured way to review their own video \u2014 not to replace a qualified coach's judgment, in-person feedback, or a medical professional's advice on pain or injury."
+      }
+    }
+  ]
+}</script>
+
+</head><body>
+<header class="site"><a class="brand" href="/">🏏 AI Cricket Coach</a><nav class="topnav" aria-label="Site"><a href="/">Home</a><a href="/how-it-works.html">How It Works</a><a href="/ai-cricket-video-analysis.html" aria-current="page">AI Video Analysis</a><a href="/batting-analysis.html">Batting Analysis</a><a href="/bowling-analysis.html">Bowling Analysis</a><a href="/cricket-drills.html">Drills</a><a href="/cricket-technique.html">Technique</a><a href="/cricket-glossary.html">Glossary</a><a href="/faq.html">FAQ</a><a href="/blog/">Blog</a><a href="/about.html">About</a></nav></header>
+<main>
+<p class="crumbs"><a href="/">Home</a> / AI Cricket Video Analysis, Explained</p>
+<h1>AI Cricket Video Analysis, Explained</h1>
+<p>AI cricket video analysis is the practice of using computer vision to look at a player's own recorded video and describe what's visibly happening in cricket-coaching terms — rather than relying on someone's memory of how a shot or delivery felt.</p>
+<h2>What is pose estimation?</h2>
+<p><strong>Pose estimation</strong> is a general computer-vision technique that locates key points on a person's body — shoulders, hips, knees, wrists — in each frame of a video, effectively sketching a stick-figure of their posture over time. It isn't specific to cricket; the same underlying technology is used in sports analysis, fitness apps and animation. AI Cricket Coach applies it to cricket-specific movement, such as a batting stance or a bowling action.</p>
+<h2>What can be measured from a video — and what can't</h2>
+<p>Because the input is a single 2D video, movement analysis has real limits. It's well suited to visible, observable things:</p>
+<ul>
+<li>Batting stance, balance and head position</li>
+<li>Footwork — front-foot and back-foot movement, weight transfer</li>
+<li>Bat path and follow-through</li>
+<li>Bowling run-up rhythm, delivery stride, arm action and release position when visible</li>
+</ul>
+<p>It is not suited to measurements a camera alone can't capture reliably: exact ball speed or spin revolutions, internal joint stress or injury risk, or anything the camera angle or lighting hides. AI Cricket Coach is built to say <em>"unable to assess reliably from this video"</em> rather than invent an answer when evidence is insufficient.</p>
+<h2>Why confidence levels matter</h2>
+<p>Every possible technique issue the platform reports is meant to carry a confidence level — High, Medium or Low — reflecting how clearly the video supports that observation. A low-confidence note usually means the camera angle or video quality left room for doubt, and it's flagged as such rather than presented as certain.</p>
+<h2>Frequently asked questions</h2>
+<details class="qa"><summary>What is AI cricket video analysis?</summary><p>AI cricket video analysis is the use of computer vision — specifically pose estimation — to observe a player's body position and movement in a video, and relate what's visible to established cricket coaching concepts like stance, footwork, head position, or bowling arm action.</p></details>
+<details class="qa"><summary>What does batting video analysis measure?</summary><p>It looks at what a camera can actually show: stance and balance, head position, front-foot and back-foot movement, weight transfer, bat path, contact position when visible, and follow-through. It does not measure things a single video can't capture, such as bat speed at the point of contact or internal joint loading.</p></details>
+<details class="qa"><summary>Can AI replace a real cricket coach?</summary><p>No. AI Cricket Coach is designed to support practice between coaching sessions and give players a structured way to review their own video — not to replace a qualified coach's judgment, in-person feedback, or a medical professional's advice on pain or injury.</p></details>
+<p>See analysis details for <a href="/batting-analysis.html">batting</a> and <a href="/bowling-analysis.html">bowling</a>, or <a href="/how-it-works.html">how the full pipeline works</a>. Ready to try it? <a href="/?go=analyze">Analyze a cricket video in the app</a>.</p>
+</main>
+<footer class="site">
+ <p><strong>AI Cricket Coach</strong> — AI-powered cricket video analysis and training platform.</p>
+ <p class="mute">AI Cricket Coach provides general cricket coaching education and, where connected, computer-vision observations from your own uploaded videos. It is not a substitute for a qualified cricket coach or a medical professional, and it does not diagnose injuries or guarantee performance improvement. See our <a href="/faq.html">FAQ</a> and the Limitations section on the <a href="/">homepage</a> for details.</p>
+ <p class="mute">&copy; 2026 AI Cricket Coach. <a href="/about.html">About</a> · <a href="/faq.html">FAQ</a> · <a href="/">Open the app</a></p>
+</footer>
+</body></html>
