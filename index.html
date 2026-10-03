@@ -12,62 +12,69 @@
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "@id": "https://aicricketcoach.app/#website", "name": "AI Cricket Coach", "url": "https://aicricketcoach.app", "publisher": {"@id": "https://aicricketcoach.app/#org"}, "inLanguage": "en"}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "AI Cricket Coach", "url": "https://aicricketcoach.app/", "description": "AI-powered cricket video analysis and training platform for cricket players.", "applicationCategory": "SportsApplication", "operatingSystem": "Web (Chrome on Android)", "featureList": ["Player profiles", "Video recording and upload with quality checks", "General cricket drill library"], "publisher": {"@id": "https://aicricketcoach.app/#org"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is AI Cricket Coach?", "acceptedAnswer": {"@type": "Answer", "text": "AI Cricket Coach is an AI-powered cricket video analysis and training platform for cricket players. Players record or upload a batting or bowling video to get technique observations, drills and a training plan."}}, {"@type": "Question", "name": "How does cricket video analysis work?", "acceptedAnswer": {"@type": "Answer", "text": "You upload or record a video, the app checks its length, size and quality, and a pose-estimation model observes visible movement such as stance, footwork or arm action. Results are grouped into strengths, possible issues with confidence levels, and drills."}}, {"@type": "Question", "name": "Does AI Cricket Coach replace a real cricket coach?", "acceptedAnswer": {"@type": "Answer", "text": "No. It is designed to support practice between coaching sessions and does not replace a qualified coach or a medical professional."}}, {"@type": "Question", "name": "Does it diagnose injuries?", "acceptedAnswer": {"@type": "Answer", "text": "No. It does not diagnose injuries or give medical advice. For pain or a suspected injury, see a qualified coach or a medical professional."}}, {"@type": "Question", "name": "Is AI video analysis available yet?", "acceptedAnswer": {"@type": "Answer", "text": "Not yet. Video recording, upload and quality checks are live. The AI analysis engine is under development, and the app shows that analysis is unavailable instead of inventing feedback."}}]}</script>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f2f5ef;--card:#fff;--ink:#12241a;--mute:#56685c;--line:#d3dcd0;--pitch:#1f4d2e;--onp:#f2f5ef;--seam:#b3261e;--sand:#e6dfc8}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1a13;--card:#15271c;--ink:#e9efe6;--mute:#9db0a2;--line:#274031;--pitch:#4a9e64;--onp:#0e1a13;--seam:#e0564c;--sand:#2a3a2e}}
-:root[data-theme="dark"]{--bg:#0e1a13;--card:#15271c;--ink:#e9efe6;--mute:#9db0a2;--line:#274031;--pitch:#4a9e64;--onp:#0e1a13;--seam:#e0564c;--sand:#2a3a2e}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Barlow,system-ui,sans-serif;padding-bottom:76px}
+:root{--bg:#f4f1e6;--card:#fff;--ink:#13241a;--mute:#5b6a5e;--line:#dcd5c1;--pitch:#1b4332;--pitch2:#0e2a1d;--gold:#a9792c;--onp:#f6f3e7;--seam:#9c2b21;--sand:#ecdfc0}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1a12;--card:#13271c;--ink:#edf2e9;--mute:#9db0a2;--line:#25402f;--pitch:#3f8a5c;--pitch2:#1c4530;--gold:#e3b341;--onp:#0a1a12;--seam:#e2695c;--sand:#223527}}
+:root[data-theme="dark"]{--bg:#0a1a12;--card:#13271c;--ink:#edf2e9;--mute:#9db0a2;--line:#25402f;--pitch:#3f8a5c;--pitch2:#1c4530;--gold:#e3b341;--onp:#0a1a12;--seam:#e2695c;--sand:#223527}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Barlow,system-ui,sans-serif;padding-bottom:76px}
 main{max-width:920px;margin:0 auto;padding:20px 16px}
-h1,h2,h3{font-family:'Barlow Condensed','Arial Narrow',sans-serif;line-height:1.05;margin:0 0 .4em;letter-spacing:.01em}
-h1{font-size:clamp(3rem,13vw,5.5rem)}h2{font-size:2rem}h3{font-size:1.35rem}
+h1,h2,h3{font-family:'Barlow Condensed','Arial Narrow',sans-serif;line-height:1.05;margin:0 0 .4em;letter-spacing:.005em;font-weight:700}
+h1{font-size:clamp(3rem,13vw,5.5rem);font-weight:800}h2{font-size:2rem}h3{font-size:1.35rem}
 p{margin:0 0 .8em;max-width:60ch}.mute{color:var(--mute)}
-a{color:inherit}[hidden]{display:none!important}
+a{color:var(--pitch)}[hidden]{display:none!important}
+::selection{background:var(--gold);color:var(--pitch2)}
 nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--line);z-index:5}
-nav a{flex:1;text-align:center;padding:10px 4px;text-decoration:none;font-size:.8rem;color:var(--mute)}
+nav a{flex:1;text-align:center;padding:10px 4px;text-decoration:none;font-size:.8rem;color:var(--mute);position:relative}
 nav a b{display:block;font-size:1.25rem;font-weight:400}nav a.on{color:var(--pitch);font-weight:600}
+nav a.on:before{content:'';position:absolute;top:0;left:30%;right:30%;height:3px;background:var(--gold);border-radius:0 0 3px 3px}
 nav a:focus-visible,.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.chip input:focus-visible+span{outline:3px solid var(--seam);outline-offset:2px}
-@media(min-width:720px){body{padding:0}nav{position:sticky;top:0;bottom:auto;border:0;border-bottom:1px solid var(--line);justify-content:center}nav a{flex:0 0 120px;display:flex;gap:6px;justify-content:center;align-items:center;font-size:.95rem}nav a b{display:inline;font-size:1.1rem}}
-.btn{display:inline-block;background:var(--pitch);color:var(--onp);border:0;border-radius:10px;padding:13px 20px;font:600 1rem Barlow,sans-serif;text-decoration:none;cursor:pointer}
-.btn.ghost{background:none;color:var(--ink);border:2px solid var(--ink)}.btn:disabled{opacity:.45;cursor:not-allowed}
+@media(min-width:720px){body{padding:0}nav{position:sticky;top:0;bottom:auto;border:0;border-bottom:1px solid var(--line);justify-content:center}nav a{flex:0 0 120px;display:flex;gap:6px;justify-content:center;align-items:center;font-size:.95rem}nav a b{display:inline;font-size:1.1rem}nav a.on:before{top:auto;bottom:0;border-radius:3px 3px 0 0}}
+.btn{display:inline-block;background:linear-gradient(180deg,var(--pitch) 0%,var(--pitch2) 100%);color:var(--onp);border:0;border-radius:10px;padding:13px 20px;font:600 1rem Barlow,sans-serif;text-decoration:none;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 1px 2px rgba(0,0,0,.18);transition:transform .12s,box-shadow .12s}
+.btn:active{transform:translateY(1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
+.btn.ghost{background:none;color:var(--ink);border:2px solid var(--ink);box-shadow:none}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
 .row{display:flex;flex-wrap:wrap;gap:10px}
-.hero{background:var(--pitch);color:var(--onp);border-radius:22px;padding:28px 20px 22px;margin-bottom:28px;overflow:hidden}
-.hero p{font-size:1.1rem}.hero .btn{background:var(--onp);color:var(--pitch)}.hero .btn.ghost{background:none;color:var(--onp);border-color:var(--onp)}
+.hero{background:linear-gradient(155deg,var(--pitch) 0%,var(--pitch2) 72%),repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 36px,rgba(0,0,0,.05) 36px 72px);color:var(--onp);border-radius:22px;padding:28px 20px 22px;margin-bottom:28px;overflow:hidden;position:relative;box-shadow:0 18px 40px -22px rgba(0,0,0,.5)}
+.hero:after{content:'';position:absolute;left:20px;right:20px;top:0;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.8}
+.hero p{font-size:1.1rem}.hero .btn{background:var(--gold);color:var(--pitch2);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 4px 14px -4px rgba(0,0,0,.4)}.hero .btn.ghost{background:none;color:var(--onp);border-color:var(--onp)}
 .hero svg{display:block;width:100%;margin-top:22px}
 .ball{stroke-dasharray:420;stroke-dashoffset:420;animation:d 2.2s .3s ease-out forwards}@keyframes d{to{stroke-dashoffset:0}}
 @media(prefers-reduced-motion:reduce){.ball{animation:none;stroke-dashoffset:0}}
 .pill{display:inline-block;font-size:.8rem;font-weight:600;padding:2px 10px;border-radius:999px;background:var(--sand);color:var(--ink)}
 .pill.live{background:var(--pitch);color:var(--onp)}
+.pill.gold{background:var(--gold);color:var(--pitch2);font-weight:700}
 .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
-a.card{display:block;text-decoration:none}a.card:hover{border-color:var(--pitch)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;transition:border-color .15s,transform .15s}
+a.card{display:block;text-decoration:none}a.card:hover{border-color:var(--pitch);transform:translateY(-1px)}
 .card.off{opacity:.6}
+.card.gold{border:1px solid var(--gold);box-shadow:0 0 0 1px var(--gold),0 14px 30px -18px var(--gold)}
 .steps{list-style:none;padding:0;margin:0 0 32px;display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));counter-reset:s}
-.steps li{border-left:4px solid var(--seam);padding-left:12px;counter-increment:s}.steps li:before{content:counter(s);font:700 2rem 'Barlow Condensed',sans-serif;color:var(--seam);display:block}
+.steps li{border-left:4px solid var(--seam);padding-left:12px;counter-increment:s}.steps li:before{content:counter(s);font:800 2rem 'Barlow Condensed',sans-serif;color:var(--seam);display:block}
 .feat{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
 label.f{display:block;margin:0 0 14px;font-weight:600}
 input[type=text],input[type=number],input[type=email],select,textarea{width:100%;margin-top:4px;padding:11px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:400 1rem Barlow,sans-serif}
+input:focus-visible,select:focus-visible,textarea:focus-visible{border-color:var(--gold)}
 fieldset{border:0;padding:0;margin:0 0 14px}legend{font-weight:600;margin-bottom:6px}
 .chips{display:flex;flex-wrap:wrap;gap:8px}.chip input{position:absolute;opacity:0}
-.chip span{display:inline-block;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:var(--card);cursor:pointer}
-.chip input:checked+span{background:var(--pitch);color:var(--onp);border-color:var(--pitch)}
-.stat{font:700 2.6rem 'Barlow Condensed',sans-serif;color:var(--pitch)}
+.chip span{display:inline-block;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:var(--card);cursor:pointer;transition:background .12s,border-color .12s}
+.chip input:checked+span{background:var(--pitch);color:var(--onp);border-color:var(--pitch);box-shadow:inset 0 0 0 1px var(--gold)}
+.stat{font:800 2.7rem 'Barlow Condensed',sans-serif;color:var(--pitch);font-variant-numeric:tabular-nums;letter-spacing:-.01em;border-bottom:3px solid var(--gold);display:inline-block;padding-bottom:2px}
 video{width:100%;max-height:360px;border-radius:12px;background:#000;margin:10px 0}
 .msg{padding:12px;border-radius:10px;background:var(--sand);margin:8px 0}.msg.bad{border-left:5px solid var(--seam)}.msg.ok{border-left:5px solid var(--pitch)}
 ul.chk{margin:0 0 16px;padding-left:20px}
-.chip span{padding:11px 14px}.bar{height:8px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;width:0;background:var(--pitch);transition:width .3s}
+.chip span{padding:11px 14px}.bar{height:8px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pitch),var(--gold));transition:width .3s}
 .thumb{width:72px;height:auto;border-radius:8px;background:#000}.day{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px}.day input{width:26px;height:26px;margin-top:2px;accent-color:var(--pitch)}
 #toast{position:fixed;left:12px;right:12px;bottom:84px;z-index:40;margin:0}
-#stg{list-style:none;padding:0;margin:0 0 12px}#stg li{padding:8px 0;color:var(--mute)}#stg li.on{color:var(--ink);font-weight:600}#stg li.on:before{content:"● "}#stg li.ok:before{content:"✓ "}
+#stg{list-style:none;padding:0;margin:0 0 12px}#stg li{padding:8px 0;color:var(--mute)}#stg li.on{color:var(--ink);font-weight:600}#stg li.on:before{content:"● ";color:var(--gold)}#stg li.ok:before{content:"✓ ";color:var(--pitch)}
 #camscr{position:fixed;inset:0;background:#000;z-index:30;color:#fff;overflow:hidden}
 #camscr video,#camscr canvas{position:absolute;inset:0;width:100%;height:100%}#cv{object-fit:contain}
-#guide{position:absolute;left:10%;right:10%;top:18%;bottom:26%;border:3px solid #4a9e64;border-radius:24px;pointer-events:none}
+#guide{position:absolute;left:10%;right:10%;top:18%;bottom:26%;border:3px solid var(--gold);border-radius:24px;pointer-events:none}
 #ctop{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 10px;background:linear-gradient(#000a,transparent)}
 #chint{position:absolute;left:0;right:0;top:calc(66px + env(safe-area-inset-top,0px));text-align:center;font-weight:600;padding:0 16px;text-shadow:0 1px 3px #000}
 #cbot{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;gap:24px;padding:16px 12px calc(20px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,#000a)}
 .cbtn{width:48px;height:48px;border-radius:50%;border:0;background:#0009;color:#fff;font-size:1.2rem}
 #cstart,#cstop{width:72px;height:72px;border-radius:50%;border:4px solid #fff;background:#e0564c;padding:0}#cstop{border-radius:20px}
-#ccount{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 9rem 'Barlow Condensed',sans-serif;background:#0006}
+#ccount{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:800 9rem 'Barlow Condensed',sans-serif;background:#0006}
 #crec{color:#ff5a4f;font-weight:700}
 #cpose{position:absolute;left:12px;bottom:calc(120px + env(safe-area-inset-bottom,0px));font-size:.85rem;background:#0009;padding:4px 10px;border-radius:999px}
 #cdisc{position:absolute;left:12px;right:12px;bottom:calc(120px + env(safe-area-inset-bottom,0px));background:#15271c;padding:12px;border-radius:12px}
@@ -84,7 +91,7 @@ details.qa{border-bottom:1px solid var(--line);padding:10px 0}details.qa summary
   <h1>Analyze.<br>Train.<br>Improve.</h1>
   <p>Upload your cricket video and get AI-powered technique insights and personalized training guidance.</p>
   <div class="row"><a class="btn" href="#" data-go="analyze">Analyze my video</a><a class="btn ghost" href="#" data-go="training">Explore training</a></div>
-  <svg viewBox="0 0 320 110" aria-hidden="true"><rect x="0" y="0" width="320" height="110" rx="8" fill="#000" opacity=".18"/><rect x="20" y="38" width="280" height="34" fill="#e6dfc8" opacity=".9"/><g stroke="#f2f5ef" stroke-width="2"><line x1="60" y1="30" x2="60" y2="80"/><line x1="260" y1="30" x2="260" y2="80"/><line x1="20" y1="55" x2="300" y2="55" stroke-dasharray="2 6" opacity=".5"/></g><g stroke="#f2f5ef" stroke-width="3"><line x1="272" y1="48" x2="272" y2="62"/><line x1="278" y1="48" x2="278" y2="62"/><line x1="284" y1="48" x2="284" y2="62"/></g><path class="ball" d="M40 20 C120 20 170 90 268 58" fill="none" stroke="#e0564c" stroke-width="3" stroke-dasharray="420"/><circle cx="268" cy="58" r="5" fill="#e0564c"/></svg>
+  <svg viewBox="0 0 320 110" aria-hidden="true"><rect x="0" y="0" width="320" height="110" rx="8" fill="#000" opacity=".18"/><rect x="20" y="38" width="280" height="34" fill="#e6dfc8" opacity=".9"/><g stroke="#f2f5ef" stroke-width="2"><line x1="60" y1="30" x2="60" y2="80"/><line x1="260" y1="30" x2="260" y2="80"/><line x1="20" y1="55" x2="300" y2="55" stroke-dasharray="2 6" opacity=".5"/></g><g stroke="#f2f5ef" stroke-width="3"><line x1="272" y1="48" x2="272" y2="62"/><line x1="278" y1="48" x2="278" y2="62"/><line x1="284" y1="48" x2="284" y2="62"/></g><path class="ball" d="M40 20 C120 20 170 90 268 58" fill="none" stroke="#d4a537" stroke-width="3" stroke-dasharray="420"/><circle cx="268" cy="58" r="5" fill="#d4a537"/></svg>
  </div>
  <p class="msg">Preview build: profile, dashboard and video upload with quality checks work today. AI Video Analysis — Coming Soon. No feedback is generated until a real pose-estimation model is connected.</p>
  <h2>What is AI Cricket Coach?</h2>
@@ -172,11 +179,11 @@ details.qa{border-bottom:1px solid var(--line);padding:10px 0}details.qa summary
   <a class="card" href="#" data-go="analyze" data-type="Batting"><h3>Batting analysis</h3><span class="mute" id="lb">Upload a batting video.</span></a>
   <a class="card" href="#" data-go="analyze" data-type="Fast Bowling"><h3>Bowling analysis</h3><span class="mute" id="lw">Upload a fast or spin bowling video.</span></a>
   <a class="card" href="#" data-go="training" data-lib="Fitness"><h3>Fitness</h3><span class="mute">Mobility, core and strength drills.</span></a>
-  <a class="card" href="#" data-go="progress"><h3>Progress <span class="pill">Premium</span></h3><span class="mute" id="prg"></span></a>
-  <a class="card" href="#" data-go="coach"><h3>AI Coach Chat <span class="pill">Premium</span></h3><span class="mute">Ask about batting, bowling or drills, in English, Hindi or Hinglish.</span></a>
+  <a class="card" href="#" data-go="progress"><h3>Progress <span class="pill gold">Premium</span></h3><span class="mute" id="prg"></span></a>
+  <a class="card" href="#" data-go="coach"><h3>AI Coach Chat <span class="pill gold">Premium</span></h3><span class="mute">Ask about batting, bowling or drills, in English, Hindi or Hinglish.</span></a>
   <div class="card"><h3>Recent feedback</h3><span class="mute" id="rf">No videos analyzed yet.</span></div>
   <div class="card"><h3>Recommended drills</h3><span class="mute" id="rd">None yet.</span></div>
-  <a class="card" href="#" data-go="history"><h3>Analysis history <span class="pill">Premium</span></h3><span class="mute" id="vlist"></span></a>
+  <a class="card" href="#" data-go="history"><h3>Analysis history <span class="pill gold">Premium</span></h3><span class="mute" id="vlist"></span></a>
  </div>
  <div class="grid" style="margin-top:12px">
   <div class="card"><h3>Latest analysis</h3><span class="mute" id="lat">None yet. Upload a video to get started.</span></div>
@@ -237,7 +244,7 @@ details.qa{border-bottom:1px solid var(--line);padding:10px 0}details.qa summary
    <p class="mute" id="plan_free_status"></p>
    <ul><li>3 video analyses per month</li><li>Basic technique report (summary, top 2 strengths and issues)</li><li>Basic drills</li></ul>
   </div>
-  <div class="card" style="border-color:var(--pitch)">
+  <div class="card gold">
    <h3>Premium</h3>
    <ul>
     <li>Unlimited video analysis</li>
